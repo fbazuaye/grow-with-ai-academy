@@ -11,8 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as EnquireRouteImport } from './routes/enquire'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProgramsSlugRouteImport } from './routes/programs.$slug'
+import { Route as AdminSchedulesRouteImport } from './routes/admin.schedules'
+import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
+import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
+import { Route as AdminEnquiriesRouteImport } from './routes/admin.enquiries'
 
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
@@ -24,46 +31,136 @@ const EnquireRoute = EnquireRouteImport.update({
   path: '/enquire',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const ProgramsSlugRoute = ProgramsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => ProgramsRoute,
 } as any)
+const AdminSchedulesRoute = AdminSchedulesRouteImport.update({
+  id: '/schedules',
+  path: '/schedules',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProgramsRoute = AdminProgramsRouteImport.update({
+  id: '/programs',
+  path: '/programs',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPricingRoute = AdminPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEnquiriesRoute = AdminEnquiriesRouteImport.update({
+  id: '/enquiries',
+  path: '/enquiries',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/auth': typeof AuthRoute
   '/enquire': typeof EnquireRoute
   '/programs': typeof ProgramsRouteWithChildren
+  '/admin/enquiries': typeof AdminEnquiriesRoute
+  '/admin/pricing': typeof AdminPricingRoute
+  '/admin/programs': typeof AdminProgramsRoute
+  '/admin/schedules': typeof AdminSchedulesRoute
   '/programs/$slug': typeof ProgramsSlugRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/enquire': typeof EnquireRoute
   '/programs': typeof ProgramsRouteWithChildren
+  '/admin/enquiries': typeof AdminEnquiriesRoute
+  '/admin/pricing': typeof AdminPricingRoute
+  '/admin/programs': typeof AdminProgramsRoute
+  '/admin/schedules': typeof AdminSchedulesRoute
   '/programs/$slug': typeof ProgramsSlugRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/auth': typeof AuthRoute
   '/enquire': typeof EnquireRoute
   '/programs': typeof ProgramsRouteWithChildren
+  '/admin/enquiries': typeof AdminEnquiriesRoute
+  '/admin/pricing': typeof AdminPricingRoute
+  '/admin/programs': typeof AdminProgramsRoute
+  '/admin/schedules': typeof AdminSchedulesRoute
   '/programs/$slug': typeof ProgramsSlugRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/enquire' | '/programs' | '/programs/$slug'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/auth'
+    | '/enquire'
+    | '/programs'
+    | '/admin/enquiries'
+    | '/admin/pricing'
+    | '/admin/programs'
+    | '/admin/schedules'
+    | '/programs/$slug'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/enquire' | '/programs' | '/programs/$slug'
-  id: '__root__' | '/' | '/enquire' | '/programs' | '/programs/$slug'
+  to:
+    | '/'
+    | '/auth'
+    | '/enquire'
+    | '/programs'
+    | '/admin/enquiries'
+    | '/admin/pricing'
+    | '/admin/programs'
+    | '/admin/schedules'
+    | '/programs/$slug'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/auth'
+    | '/enquire'
+    | '/programs'
+    | '/admin/enquiries'
+    | '/admin/pricing'
+    | '/admin/programs'
+    | '/admin/schedules'
+    | '/programs/$slug'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AuthRoute: typeof AuthRoute
   EnquireRoute: typeof EnquireRoute
   ProgramsRoute: typeof ProgramsRouteWithChildren
 }
@@ -84,12 +181,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnquireRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/programs/$slug': {
       id: '/programs/$slug'
@@ -98,8 +216,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsSlugRouteImport
       parentRoute: typeof ProgramsRoute
     }
+    '/admin/schedules': {
+      id: '/admin/schedules'
+      path: '/schedules'
+      fullPath: '/admin/schedules'
+      preLoaderRoute: typeof AdminSchedulesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/programs': {
+      id: '/admin/programs'
+      path: '/programs'
+      fullPath: '/admin/programs'
+      preLoaderRoute: typeof AdminProgramsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pricing': {
+      id: '/admin/pricing'
+      path: '/pricing'
+      fullPath: '/admin/pricing'
+      preLoaderRoute: typeof AdminPricingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/enquiries': {
+      id: '/admin/enquiries'
+      path: '/enquiries'
+      fullPath: '/admin/enquiries'
+      preLoaderRoute: typeof AdminEnquiriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminEnquiriesRoute: typeof AdminEnquiriesRoute
+  AdminPricingRoute: typeof AdminPricingRoute
+  AdminProgramsRoute: typeof AdminProgramsRoute
+  AdminSchedulesRoute: typeof AdminSchedulesRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminEnquiriesRoute: AdminEnquiriesRoute,
+  AdminPricingRoute: AdminPricingRoute,
+  AdminProgramsRoute: AdminProgramsRoute,
+  AdminSchedulesRoute: AdminSchedulesRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface ProgramsRouteChildren {
   ProgramsSlugRoute: typeof ProgramsSlugRoute
@@ -115,6 +279,8 @@ const ProgramsRouteWithChildren = ProgramsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AuthRoute: AuthRoute,
   EnquireRoute: EnquireRoute,
   ProgramsRoute: ProgramsRouteWithChildren,
 }
