@@ -56,7 +56,7 @@ function ProgramDetail() {
               </h1>
               <p className="mt-4 max-w-2xl text-primary-foreground/80">{program.outcome}</p>
               <div className="mt-6 flex flex-wrap gap-2">
-                {program.tools.map((t) => (
+                {(program.tools as string[]).map((t: string) => (
                   <span key={t} className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs">
                     <Sparkles className="mr-1 inline h-3 w-3 text-accent" />{t}
                   </span>
@@ -82,7 +82,7 @@ function ProgramDetail() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">What You'll Learn</p>
           <h2 className="mt-2 font-display text-3xl">Skills you can apply this week</h2>
           <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-            {program.learnings.map((l) => (
+            {(program.learnings as string[]).map((l: string) => (
               <li key={l} className="flex items-start gap-3 rounded-xl border border-border bg-card p-4">
                 <Check className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
                 <span className="text-sm">{l}</span>
