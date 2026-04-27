@@ -16,7 +16,9 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProgramsSlugRouteImport } from './routes/programs.$slug'
+import { Route as AdminSchedulesRouteImport } from './routes/admin.schedules'
 import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
+import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
 import { Route as AdminEnquiriesRouteImport } from './routes/admin.enquiries'
 
 const ProgramsRoute = ProgramsRouteImport.update({
@@ -54,9 +56,19 @@ const ProgramsSlugRoute = ProgramsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ProgramsRoute,
 } as any)
+const AdminSchedulesRoute = AdminSchedulesRouteImport.update({
+  id: '/schedules',
+  path: '/schedules',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProgramsRoute = AdminProgramsRouteImport.update({
   id: '/programs',
   path: '/programs',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPricingRoute = AdminPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminEnquiriesRoute = AdminEnquiriesRouteImport.update({
@@ -72,7 +84,9 @@ export interface FileRoutesByFullPath {
   '/enquire': typeof EnquireRoute
   '/programs': typeof ProgramsRouteWithChildren
   '/admin/enquiries': typeof AdminEnquiriesRoute
+  '/admin/pricing': typeof AdminPricingRoute
   '/admin/programs': typeof AdminProgramsRoute
+  '/admin/schedules': typeof AdminSchedulesRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -82,7 +96,9 @@ export interface FileRoutesByTo {
   '/enquire': typeof EnquireRoute
   '/programs': typeof ProgramsRouteWithChildren
   '/admin/enquiries': typeof AdminEnquiriesRoute
+  '/admin/pricing': typeof AdminPricingRoute
   '/admin/programs': typeof AdminProgramsRoute
+  '/admin/schedules': typeof AdminSchedulesRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -94,7 +110,9 @@ export interface FileRoutesById {
   '/enquire': typeof EnquireRoute
   '/programs': typeof ProgramsRouteWithChildren
   '/admin/enquiries': typeof AdminEnquiriesRoute
+  '/admin/pricing': typeof AdminPricingRoute
   '/admin/programs': typeof AdminProgramsRoute
+  '/admin/schedules': typeof AdminSchedulesRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -107,7 +125,9 @@ export interface FileRouteTypes {
     | '/enquire'
     | '/programs'
     | '/admin/enquiries'
+    | '/admin/pricing'
     | '/admin/programs'
+    | '/admin/schedules'
     | '/programs/$slug'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -117,7 +137,9 @@ export interface FileRouteTypes {
     | '/enquire'
     | '/programs'
     | '/admin/enquiries'
+    | '/admin/pricing'
     | '/admin/programs'
+    | '/admin/schedules'
     | '/programs/$slug'
     | '/admin'
   id:
@@ -128,7 +150,9 @@ export interface FileRouteTypes {
     | '/enquire'
     | '/programs'
     | '/admin/enquiries'
+    | '/admin/pricing'
     | '/admin/programs'
+    | '/admin/schedules'
     | '/programs/$slug'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -192,11 +216,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsSlugRouteImport
       parentRoute: typeof ProgramsRoute
     }
+    '/admin/schedules': {
+      id: '/admin/schedules'
+      path: '/schedules'
+      fullPath: '/admin/schedules'
+      preLoaderRoute: typeof AdminSchedulesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/programs': {
       id: '/admin/programs'
       path: '/programs'
       fullPath: '/admin/programs'
       preLoaderRoute: typeof AdminProgramsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pricing': {
+      id: '/admin/pricing'
+      path: '/pricing'
+      fullPath: '/admin/pricing'
+      preLoaderRoute: typeof AdminPricingRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/enquiries': {
@@ -211,13 +249,17 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminEnquiriesRoute: typeof AdminEnquiriesRoute
+  AdminPricingRoute: typeof AdminPricingRoute
   AdminProgramsRoute: typeof AdminProgramsRoute
+  AdminSchedulesRoute: typeof AdminSchedulesRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminEnquiriesRoute: AdminEnquiriesRoute,
+  AdminPricingRoute: AdminPricingRoute,
   AdminProgramsRoute: AdminProgramsRoute,
+  AdminSchedulesRoute: AdminSchedulesRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -245,3 +287,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
