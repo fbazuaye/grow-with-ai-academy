@@ -16,6 +16,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProgramsSlugRouteImport } from './routes/programs.$slug'
+import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
 import { Route as AdminEnquiriesRouteImport } from './routes/admin.enquiries'
 
 const ProgramsRoute = ProgramsRouteImport.update({
@@ -53,6 +54,11 @@ const ProgramsSlugRoute = ProgramsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ProgramsRoute,
 } as any)
+const AdminProgramsRoute = AdminProgramsRouteImport.update({
+  id: '/programs',
+  path: '/programs',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminEnquiriesRoute = AdminEnquiriesRouteImport.update({
   id: '/enquiries',
   path: '/enquiries',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/enquire': typeof EnquireRoute
   '/programs': typeof ProgramsRouteWithChildren
   '/admin/enquiries': typeof AdminEnquiriesRoute
+  '/admin/programs': typeof AdminProgramsRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/enquire': typeof EnquireRoute
   '/programs': typeof ProgramsRouteWithChildren
   '/admin/enquiries': typeof AdminEnquiriesRoute
+  '/admin/programs': typeof AdminProgramsRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/enquire': typeof EnquireRoute
   '/programs': typeof ProgramsRouteWithChildren
   '/admin/enquiries': typeof AdminEnquiriesRoute
+  '/admin/programs': typeof AdminProgramsRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/enquire'
     | '/programs'
     | '/admin/enquiries'
+    | '/admin/programs'
     | '/programs/$slug'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/enquire'
     | '/programs'
     | '/admin/enquiries'
+    | '/admin/programs'
     | '/programs/$slug'
     | '/admin'
   id:
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/enquire'
     | '/programs'
     | '/admin/enquiries'
+    | '/admin/programs'
     | '/programs/$slug'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -180,6 +192,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsSlugRouteImport
       parentRoute: typeof ProgramsRoute
     }
+    '/admin/programs': {
+      id: '/admin/programs'
+      path: '/programs'
+      fullPath: '/admin/programs'
+      preLoaderRoute: typeof AdminProgramsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/enquiries': {
       id: '/admin/enquiries'
       path: '/enquiries'
@@ -192,11 +211,13 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminEnquiriesRoute: typeof AdminEnquiriesRoute
+  AdminProgramsRoute: typeof AdminProgramsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminEnquiriesRoute: AdminEnquiriesRoute,
+  AdminProgramsRoute: AdminProgramsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
