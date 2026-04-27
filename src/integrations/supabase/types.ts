@@ -14,16 +14,243 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      enquiries: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          name: string
+          phone: string
+          preferred_date: string | null
+          program_id: string | null
+          program_title: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          phone: string
+          preferred_date?: string | null
+          program_id?: string | null
+          program_title?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          phone?: string
+          preferred_date?: string | null
+          program_id?: string | null
+          program_title?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enquiries_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pricing_tiers: {
+        Row: {
+          created_at: string
+          currency: string
+          features: string[]
+          id: string
+          name: string
+          popular: boolean
+          price_amount: number | null
+          price_label: string
+          program_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          features?: string[]
+          id?: string
+          name: string
+          popular?: boolean
+          price_amount?: number | null
+          price_label: string
+          program_id: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          features?: string[]
+          id?: string
+          name?: string
+          popular?: boolean
+          price_amount?: number | null
+          price_label?: string
+          program_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pricing_tiers_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      programs: {
+        Row: {
+          active: boolean
+          audience: string
+          created_at: string
+          duration: string
+          featured: boolean
+          hero_headline: string | null
+          icon: string
+          id: string
+          learnings: string[]
+          outcome: string
+          problem: string | null
+          slug: string
+          sort_order: number
+          title: string
+          tools: string[]
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          audience: string
+          created_at?: string
+          duration: string
+          featured?: boolean
+          hero_headline?: string | null
+          icon?: string
+          id?: string
+          learnings?: string[]
+          outcome: string
+          problem?: string | null
+          slug: string
+          sort_order?: number
+          title: string
+          tools?: string[]
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          audience?: string
+          created_at?: string
+          duration?: string
+          featured?: boolean
+          hero_headline?: string | null
+          icon?: string
+          id?: string
+          learnings?: string[]
+          outcome?: string
+          problem?: string | null
+          slug?: string
+          sort_order?: number
+          title?: string
+          tools?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      schedules: {
+        Row: {
+          batch_label: string
+          created_at: string
+          end_date: string
+          format: string
+          id: string
+          program_id: string
+          seats: number | null
+          sort_order: number
+          start_date: string
+          status: string
+          time_text: string
+        }
+        Insert: {
+          batch_label: string
+          created_at?: string
+          end_date: string
+          format?: string
+          id?: string
+          program_id: string
+          seats?: number | null
+          sort_order?: number
+          start_date: string
+          status?: string
+          time_text: string
+        }
+        Update: {
+          batch_label?: string
+          created_at?: string
+          end_date?: string
+          format?: string
+          id?: string
+          program_id?: string
+          seats?: number | null
+          sort_order?: number
+          start_date?: string
+          status?: string
+          time_text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "schedules_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +377,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
