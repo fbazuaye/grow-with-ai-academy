@@ -40,7 +40,7 @@ const formSchema = z.object({
 });
 
 function EnquirePage() {
-  const programs = Route.useLoaderData();
+  const programs = Route.useLoaderData() as Program[];
   const search = Route.useSearch();
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);

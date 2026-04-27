@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, Quote, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { fetchPrograms } from "@/lib/programs";
+import { fetchPrograms, type Program } from "@/lib/programs";
 import { ProgramIcon } from "@/components/site/ProgramIcon";
 import { whatsappLink } from "@/lib/whatsapp";
 import heroImg from "@/assets/hero.jpg";
@@ -77,7 +77,7 @@ function Index() {
           </Link>
         </div>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {programs.map((p) => (
+          {(programs as Program[]).map((p) => (
             <Link
               key={p.id}
               to="/programs/$slug"

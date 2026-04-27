@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { fetchPrograms } from "@/lib/programs";
+import { fetchPrograms, type Program } from "@/lib/programs";
 import { ProgramIcon } from "@/components/site/ProgramIcon";
 
 export const Route = createFileRoute("/programs")({
@@ -28,7 +28,7 @@ function ProgramsPage() {
       </header>
 
       <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {programs.map((p) => (
+        {(programs as Program[]).map((p) => (
           <Link
             key={p.id}
             to="/programs/$slug"

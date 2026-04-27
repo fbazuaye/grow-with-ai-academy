@@ -3,7 +3,7 @@ import { useState } from "react";
 import { format, parseISO } from "date-fns";
 import { Calendar, Check, MessageCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { fetchProgramBySlug } from "@/lib/programs";
+import { fetchProgramBySlug, type PricingTier, type Schedule } from "@/lib/programs";
 import { ProgramIcon } from "@/components/site/ProgramIcon";
 import { whatsappLink } from "@/lib/whatsapp";
 
@@ -34,7 +34,8 @@ export const Route = createFileRoute("/programs/$slug")({
 });
 
 function ProgramDetail() {
-  const { program, schedules, tiers } = Route.useLoaderData();
+  const data = Route.useLoaderData() as { program: any; schedules: Schedule[]; tiers: PricingTier[] };
+  const { program, schedules, tiers } = data;
   const [selectedBatch, setSelectedBatch] = useState<string | null>(schedules[0]?.id ?? null);
   const selected = schedules.find((s) => s.id === selectedBatch);
 
