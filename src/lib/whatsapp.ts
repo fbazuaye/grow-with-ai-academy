@@ -1,5 +1,5 @@
 // Placeholder WhatsApp number — swap when ready.
-export const WHATSAPP_NUMBER = "2340000000000";
+export const WHATSAPP_NUMBER = "2347054265401";
 export const SITE_NAME = "AI Mastery Academy";
 
 export function whatsappLink(programTitle?: string) {
