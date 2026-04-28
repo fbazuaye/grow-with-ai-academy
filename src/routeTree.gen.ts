@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as RegisterAiVideoTeensRouteImport } from './routes/register.ai-video-teens'
 import { Route as RegisterAiBusinessGrowthRouteImport } from './routes/register.ai-business-growth'
 import { Route as ProgramsSlugRouteImport } from './routes/programs.$slug'
 import { Route as AiBusinessGrowthCurriculumRouteImport } from './routes/ai-business-growth.curriculum'
@@ -22,6 +23,7 @@ import { Route as AdminSchedulesRouteImport } from './routes/admin.schedules'
 import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
 import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
 import { Route as AdminEnquiriesRouteImport } from './routes/admin.enquiries'
+import { Route as ProgramsAiVideoTeensCurriculumRouteImport } from './routes/programs_.ai-video-teens.curriculum'
 import { Route as ProgramsAiBusinessGrowthCurriculumRouteImport } from './routes/programs_.ai-business-growth.curriculum'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 
@@ -54,6 +56,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const RegisterAiVideoTeensRoute = RegisterAiVideoTeensRouteImport.update({
+  id: '/register/ai-video-teens',
+  path: '/register/ai-video-teens',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterAiBusinessGrowthRoute =
   RegisterAiBusinessGrowthRouteImport.update({
@@ -92,6 +99,12 @@ const AdminEnquiriesRoute = AdminEnquiriesRouteImport.update({
   path: '/enquiries',
   getParentRoute: () => AdminRoute,
 } as any)
+const ProgramsAiVideoTeensCurriculumRoute =
+  ProgramsAiVideoTeensCurriculumRouteImport.update({
+    id: '/programs_/ai-video-teens/curriculum',
+    path: '/programs/ai-video-teens/curriculum',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ProgramsAiBusinessGrowthCurriculumRoute =
   ProgramsAiBusinessGrowthCurriculumRouteImport.update({
     id: '/programs_/ai-business-growth/curriculum',
@@ -117,9 +130,11 @@ export interface FileRoutesByFullPath {
   '/ai-business-growth/curriculum': typeof AiBusinessGrowthCurriculumRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/register/ai-business-growth': typeof RegisterAiBusinessGrowthRoute
+  '/register/ai-video-teens': typeof RegisterAiVideoTeensRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
+  '/programs/ai-video-teens/curriculum': typeof ProgramsAiVideoTeensCurriculumRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -133,9 +148,11 @@ export interface FileRoutesByTo {
   '/ai-business-growth/curriculum': typeof AiBusinessGrowthCurriculumRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/register/ai-business-growth': typeof RegisterAiBusinessGrowthRoute
+  '/register/ai-video-teens': typeof RegisterAiVideoTeensRoute
   '/admin': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
+  '/programs/ai-video-teens/curriculum': typeof ProgramsAiVideoTeensCurriculumRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -151,9 +168,11 @@ export interface FileRoutesById {
   '/ai-business-growth/curriculum': typeof AiBusinessGrowthCurriculumRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/register/ai-business-growth': typeof RegisterAiBusinessGrowthRoute
+  '/register/ai-video-teens': typeof RegisterAiVideoTeensRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/programs_/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
+  '/programs_/ai-video-teens/curriculum': typeof ProgramsAiVideoTeensCurriculumRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -170,9 +189,11 @@ export interface FileRouteTypes {
     | '/ai-business-growth/curriculum'
     | '/programs/$slug'
     | '/register/ai-business-growth'
+    | '/register/ai-video-teens'
     | '/admin/'
     | '/api/public/chat'
     | '/programs/ai-business-growth/curriculum'
+    | '/programs/ai-video-teens/curriculum'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -186,9 +207,11 @@ export interface FileRouteTypes {
     | '/ai-business-growth/curriculum'
     | '/programs/$slug'
     | '/register/ai-business-growth'
+    | '/register/ai-video-teens'
     | '/admin'
     | '/api/public/chat'
     | '/programs/ai-business-growth/curriculum'
+    | '/programs/ai-video-teens/curriculum'
   id:
     | '__root__'
     | '/'
@@ -203,9 +226,11 @@ export interface FileRouteTypes {
     | '/ai-business-growth/curriculum'
     | '/programs/$slug'
     | '/register/ai-business-growth'
+    | '/register/ai-video-teens'
     | '/admin/'
     | '/api/public/chat'
     | '/programs_/ai-business-growth/curriculum'
+    | '/programs_/ai-video-teens/curriculum'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -216,8 +241,10 @@ export interface RootRouteChildren {
   ProgramsRoute: typeof ProgramsRouteWithChildren
   AiBusinessGrowthCurriculumRoute: typeof AiBusinessGrowthCurriculumRoute
   RegisterAiBusinessGrowthRoute: typeof RegisterAiBusinessGrowthRoute
+  RegisterAiVideoTeensRoute: typeof RegisterAiVideoTeensRoute
   ApiPublicChatRoute: typeof ApiPublicChatRoute
   ProgramsAiBusinessGrowthCurriculumRoute: typeof ProgramsAiBusinessGrowthCurriculumRoute
+  ProgramsAiVideoTeensCurriculumRoute: typeof ProgramsAiVideoTeensCurriculumRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -263,6 +290,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/register/ai-video-teens': {
+      id: '/register/ai-video-teens'
+      path: '/register/ai-video-teens'
+      fullPath: '/register/ai-video-teens'
+      preLoaderRoute: typeof RegisterAiVideoTeensRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/register/ai-business-growth': {
       id: '/register/ai-business-growth'
@@ -312,6 +346,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/enquiries'
       preLoaderRoute: typeof AdminEnquiriesRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/programs_/ai-video-teens/curriculum': {
+      id: '/programs_/ai-video-teens/curriculum'
+      path: '/programs/ai-video-teens/curriculum'
+      fullPath: '/programs/ai-video-teens/curriculum'
+      preLoaderRoute: typeof ProgramsAiVideoTeensCurriculumRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/programs_/ai-business-growth/curriculum': {
       id: '/programs_/ai-business-growth/curriculum'
@@ -368,9 +409,11 @@ const rootRouteChildren: RootRouteChildren = {
   ProgramsRoute: ProgramsRouteWithChildren,
   AiBusinessGrowthCurriculumRoute: AiBusinessGrowthCurriculumRoute,
   RegisterAiBusinessGrowthRoute: RegisterAiBusinessGrowthRoute,
+  RegisterAiVideoTeensRoute: RegisterAiVideoTeensRoute,
   ApiPublicChatRoute: ApiPublicChatRoute,
   ProgramsAiBusinessGrowthCurriculumRoute:
     ProgramsAiBusinessGrowthCurriculumRoute,
+  ProgramsAiVideoTeensCurriculumRoute: ProgramsAiVideoTeensCurriculumRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
