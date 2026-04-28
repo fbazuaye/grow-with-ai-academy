@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { format, parseISO } from "date-fns";
 import { Calendar, Check, MessageCircle, Sparkles } from "lucide-react";
@@ -9,6 +9,9 @@ import { whatsappLink } from "@/lib/whatsapp";
 
 export const Route = createFileRoute("/programs/$slug")({
   loader: async ({ params }) => {
+    if (params.slug === "ai-business-growth") {
+      throw redirect({ to: "/programs/ai-business-growth/curriculum" });
+    }
     const data = await fetchProgramBySlug(params.slug);
     if (!data) throw notFound();
     return data;
