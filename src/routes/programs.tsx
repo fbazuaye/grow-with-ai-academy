@@ -29,9 +29,14 @@ function ProgramsPage() {
 
       <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {(programs as Program[]).map((p) => {
-          const isAIBG = p.slug === "ai-business-growth";
+          const registerSlug = p.slug === "ai-business-growth"
+            ? "/register/ai-business-growth"
+            : p.slug === "ai-video-teens"
+              ? "/register/ai-video-teens"
+              : null;
+          const isRegisterable = registerSlug !== null;
           const className = "group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all " +
-            (isAIBG ? "hover:-translate-y-1 hover:border-accent/60 hover:shadow-elegant" : "opacity-90");
+            (isRegisterable ? "hover:-translate-y-1 hover:border-accent/60 hover:shadow-elegant" : "opacity-90");
           const inner = (
             <>
               <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-gold shadow-gold">
