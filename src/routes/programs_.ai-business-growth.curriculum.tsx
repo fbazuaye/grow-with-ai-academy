@@ -361,9 +361,9 @@ function CurriculumPage() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button asChild size="lg" variant="secondary" className="text-base">
-              <a href={cta} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="mr-2 h-5 w-5" /> Reserve My Seat
-              </a>
+              <Link to="/register/ai-business-growth">
+                <Sparkles className="mr-2 h-5 w-5" /> Reserve My Seat
+              </Link>
             </Button>
           </div>
           <p className="mt-6 text-xs opacity-75">
