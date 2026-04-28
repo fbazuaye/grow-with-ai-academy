@@ -98,7 +98,7 @@ function Index() {
               <div className="mt-5 flex items-center justify-between border-t border-border pt-4 text-sm">
                 <span className="text-muted-foreground">{p.duration}</span>
                 <span className="inline-flex items-center gap-1 font-medium text-foreground group-hover:text-accent">
-                  View Details <ArrowRight className="h-4 w-4" />
+                  Click to Register Now <ArrowRight className="h-4 w-4" />
                 </span>
               </div>
             </Link>
