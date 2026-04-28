@@ -1,24 +1,58 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { BookOpen, Calendar, Tag, Inbox } from "lucide-react";
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  LineChart,
+  Line,
+  Legend,
+} from "recharts";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminOverview,
 });
 
+type Enquiry = {
+  id: string;
+  status: string;
+  program_title: string | null;
+  created_at: string;
+};
+
+const STATUS_COLORS: Record<string, string> = {
+  new: "hsl(var(--accent))",
+  contacted: "#3b82f6",
+  enrolled: "#10b981",
+  closed: "#94a3b8",
+};
+
 function AdminOverview() {
   const [counts, setCounts] = useState({ programs: 0, schedules: 0, tiers: 0, enquiries: 0, newEnquiries: 0 });
+  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const [p, s, t, e, n] = await Promise.all([
+      const since = new Date();
+      since.setDate(since.getDate() - 29);
+      const [p, s, t, e, n, list] = await Promise.all([
         supabase.from("programs").select("*", { count: "exact", head: true }),
         supabase.from("schedules").select("*", { count: "exact", head: true }),
         supabase.from("pricing_tiers").select("*", { count: "exact", head: true }),
         supabase.from("enquiries").select("*", { count: "exact", head: true }),
         supabase.from("enquiries").select("*", { count: "exact", head: true }).eq("status", "new"),
+        supabase
+          .from("enquiries")
+          .select("id,status,program_title,created_at")
+          .gte("created_at", since.toISOString())
+          .order("created_at", { ascending: true }),
       ]);
       setCounts({
         programs: p.count ?? 0,
@@ -27,9 +61,48 @@ function AdminOverview() {
         enquiries: e.count ?? 0,
         newEnquiries: n.count ?? 0,
       });
+      setEnquiries((list.data ?? []) as Enquiry[]);
       setLoading(false);
     })();
   }, []);
+
+  const byProgram = useMemo(() => {
+    const map = new Map<string, number>();
+    enquiries.forEach((q) => {
+      const k = q.program_title?.trim() || "Unspecified";
+      map.set(k, (map.get(k) ?? 0) + 1);
+    });
+    return Array.from(map, ([program, count]) => ({ program, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 8);
+  }, [enquiries]);
+
+  const overTime = useMemo(() => {
+    const days: { date: string; label: string; new: number; contacted: number; enrolled: number; closed: number }[] = [];
+    const today = new Date();
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const iso = d.toISOString().slice(0, 10);
+      days.push({
+        date: iso,
+        label: d.toLocaleDateString(undefined, { month: "short", day: "numeric" }),
+        new: 0,
+        contacted: 0,
+        enrolled: 0,
+        closed: 0,
+      });
+    }
+    const idx = new Map(days.map((d, i) => [d.date, i]));
+    enquiries.forEach((q) => {
+      const key = q.created_at.slice(0, 10);
+      const i = idx.get(key);
+      if (i === undefined) return;
+      const status = (q.status in STATUS_COLORS ? q.status : "new") as keyof typeof STATUS_COLORS;
+      (days[i] as Record<string, number | string>)[status] = (days[i][status] as number) + 1;
+    });
+    return days;
+  }, [enquiries]);
 
   const cards = [
     { label: "Programs", value: counts.programs, icon: BookOpen },
@@ -54,6 +127,64 @@ function AdminOverview() {
             {c.badge && <p className="mt-1 text-xs font-semibold text-accent">{c.badge}</p>}
           </div>
         ))}
+      </div>
+
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <div className="rounded-xl border border-border bg-card p-5">
+          <div className="mb-1 flex items-baseline justify-between">
+            <h2 className="font-display text-lg">Enquiries by program</h2>
+            <span className="text-xs text-muted-foreground">Last 30 days</span>
+          </div>
+          <p className="mb-4 text-xs text-muted-foreground">Top programs generating leads.</p>
+          <div className="h-72">
+            {loading ? (
+              <div className="grid h-full place-items-center text-sm text-muted-foreground">Loading…</div>
+            ) : byProgram.length === 0 ? (
+              <div className="grid h-full place-items-center text-sm text-muted-foreground">No enquiries yet.</div>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={byProgram} layout="vertical" margin={{ left: 8, right: 16 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis type="number" allowDecimals={false} stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                  <YAxis type="category" dataKey="program" width={140} stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                  <Tooltip
+                    contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }}
+                  />
+                  <Bar dataKey="count" fill="hsl(var(--accent))" radius={[0, 6, 6, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-border bg-card p-5">
+          <div className="mb-1 flex items-baseline justify-between">
+            <h2 className="font-display text-lg">Enquiries over time</h2>
+            <span className="text-xs text-muted-foreground">Last 30 days, by status</span>
+          </div>
+          <p className="mb-4 text-xs text-muted-foreground">Daily volume split by lead status.</p>
+          <div className="h-72">
+            {loading ? (
+              <div className="grid h-full place-items-center text-sm text-muted-foreground">Loading…</div>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={overTime} margin={{ left: 4, right: 16 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="label" stroke="hsl(var(--muted-foreground))" fontSize={11} interval={4} />
+                  <YAxis allowDecimals={false} stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                  <Tooltip
+                    contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: 12 }} />
+                  <Line type="monotone" dataKey="new" stroke={STATUS_COLORS.new} strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="contacted" stroke={STATUS_COLORS.contacted} strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="enrolled" stroke={STATUS_COLORS.enrolled} strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="closed" stroke={STATUS_COLORS.closed} strokeWidth={2} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="mt-8 rounded-xl border border-dashed border-border p-5 text-sm text-muted-foreground">
