@@ -77,8 +77,12 @@ function RegisterPage() {
       toast.error("Could not submit your registration. Please try again.");
       return;
     }
-    toast.success("Registration received! We'll be in touch shortly.");
+    toast.success("Registration received! Redirecting to payment…");
     setDone(true);
+    // Redirect to Paystack to complete payment
+    setTimeout(() => {
+      window.location.href = "https://paystack.shop/pay/rdfvc8sgdi";
+    }, 1200);
   }
 
   if (done) {
@@ -89,18 +93,21 @@ function RegisterPage() {
         </div>
         <h1 className="mt-6 font-display text-4xl">You're on the list 🎉</h1>
         <p className="mt-3 text-muted-foreground">
-          Thanks for registering for the <strong>AI for Business Growth Masterclass</strong>. We've received your details and our team will reach out shortly with payment options and joining instructions.
+          Thanks for registering for the <strong>AI for Business Growth Masterclass</strong>. You'll be redirected to our secure payment page to complete your enrollment.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Button asChild variant="hero" size="lg">
+            <a href="https://paystack.shop/pay/rdfvc8sgdi">
+              Continue to Payment →
+            </a>
+          </Button>
+          <Button asChild variant="outline" size="lg">
             <a href={whatsappLink(PROGRAM_TITLE)} target="_blank" rel="noreferrer">
               <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
             </a>
           </Button>
-          <Button asChild variant="outline" size="lg" onClick={() => navigate({ to: "/" })}>
-            <Link to="/">Back to Home</Link>
-          </Button>
         </div>
+        <p className="mt-4 text-xs text-muted-foreground">Redirecting automatically…</p>
       </div>
     );
   }
