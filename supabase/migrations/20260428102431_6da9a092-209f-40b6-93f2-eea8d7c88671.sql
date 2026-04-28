@@ -1,0 +1,1 @@
+UPDATE public.programs SET duration = '2 Saturdays · 4th & 11th July 2026' WHERE slug = 'ai-business-growth';
