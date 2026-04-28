@@ -52,7 +52,8 @@ function ProgramsPage() {
               </span>
             </div>
           </Link>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
