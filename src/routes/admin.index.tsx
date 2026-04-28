@@ -98,8 +98,8 @@ function AdminOverview() {
       const key = q.created_at.slice(0, 10);
       const i = idx.get(key);
       if (i === undefined) return;
-      const status = (q.status in STATUS_COLORS ? q.status : "new") as keyof typeof STATUS_COLORS;
-      (days[i] as Record<string, number | string>)[status] = (days[i][status] as number) + 1;
+      const status = (q.status in STATUS_COLORS ? q.status : "new") as "new" | "contacted" | "enrolled" | "closed";
+      days[i][status] = days[i][status] + 1;
     });
     return days;
   }, [enquiries]);
