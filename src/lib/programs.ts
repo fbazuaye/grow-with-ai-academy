@@ -1,15 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
 export type Program = Database["public"]["Tables"]["programs"]["Row"];
 export type Schedule = Database["public"]["Tables"]["schedules"]["Row"];
 export type PricingTier = Database["public"]["Tables"]["pricing_tiers"]["Row"];
 
-// Use a stateless anon client for public reads so SSR never sends a stale
-// user JWT (which causes "JWT expired" errors on cached published pages).
+// Use a stateless anon client for public reads so neither SSR nor the browser
+// sends a stale user JWT from a previous session.
 function getReadClient() {
-  if (typeof window !== "undefined") return supabase;
   const url =
     (import.meta as any).env?.VITE_SUPABASE_URL ||
     (typeof process !== "undefined" ? process.env.SUPABASE_URL : undefined);
