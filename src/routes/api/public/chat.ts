@@ -25,6 +25,20 @@ FEATURED PROGRAM — AI for Business Growth (2-Saturday Live Class)
 - Bonuses: Prompt Templates Pack, 30-Day Content Calendar, Sales Scripts Library, Flyer Templates.
 - No tech skills required.
 
+FEATURED PROGRAM — AI Video Bootcamp for Teens: Create, Post & Grow
+- For: Teens aged 13–19 who want to create, post, and grow on social media using AI — and start earning from their content.
+- Outcome: Build a real AI-powered video creation workflow, learn to research trending topics, write scroll-stopping hooks, edit pro-quality videos in CapCut, and understand how to monetize content (YouTube, TikTok, Instagram, brand deals).
+- Schedule: 4 Saturdays, 2–3 hours per session. Mock start date: Saturday 1 August 2026 (live on Zoom).
+- Curriculum page: /programs/ai-video-teens/curriculum
+- Registration page: /register/ai-video-teens (parent/guardian details required)
+- Curriculum highlights:
+  Week 1: AI Video Workflow basics — how creators use AI end-to-end (idea → script → edit → post).
+  Week 2: Trending Topic Research with YTRadar + ChatGPT; Hook Engineering (first 3 seconds).
+  Week 3: CapCut Deep Dive — cuts, captions, effects, sounds, templates, exporting for each platform.
+  Week 4: Posting & Monetization — algorithms, posting cadence, YouTube/TikTok/Instagram monetization paths, brand-deal basics, plus a final practical (publish a real AI-edited video).
+- Tools used: CapCut, YTRadar, ChatGPT.
+- Safe & teen-friendly: parent/guardian sign-off required at registration.
+
 OTHER PROGRAMS
 - AI for Job Seekers — for Job Seekers & Career Switchers (2-day live cohort).
 - AI for Content Creators — for Creators, Influencers & Coaches (3-day live cohort).
