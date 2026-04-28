@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { whatsappLink } from "@/lib/whatsapp";
 
-export const Route = createFileRoute("/programs/ai-business-growth/curriculum")({
+export const Route = createFileRoute("/programs_/ai-business-growth/curriculum")({
   head: () => ({
     meta: [
       { title: "AI for Business Growth — 2 Saturdays Live on Zoom (4 & 11 July 2026)" },
