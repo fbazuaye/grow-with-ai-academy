@@ -62,6 +62,15 @@ function ProgramDetail() {
                   </span>
                 ))}
               </div>
+              {program.slug === "ai-business-growth" && (
+                <div className="mt-6">
+                  <Button asChild variant="hero" size="lg">
+                    <Link to="/programs/ai-business-growth/curriculum">
+                      View Full Curriculum & Details →
+                    </Link>
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>

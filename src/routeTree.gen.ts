@@ -20,6 +20,7 @@ import { Route as AdminSchedulesRouteImport } from './routes/admin.schedules'
 import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
 import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
 import { Route as AdminEnquiriesRouteImport } from './routes/admin.enquiries'
+import { Route as ProgramsAiBusinessGrowthCurriculumRouteImport } from './routes/programs.ai-business-growth.curriculum'
 
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
@@ -76,6 +77,12 @@ const AdminEnquiriesRoute = AdminEnquiriesRouteImport.update({
   path: '/enquiries',
   getParentRoute: () => AdminRoute,
 } as any)
+const ProgramsAiBusinessGrowthCurriculumRoute =
+  ProgramsAiBusinessGrowthCurriculumRouteImport.update({
+    id: '/ai-business-growth/curriculum',
+    path: '/ai-business-growth/curriculum',
+    getParentRoute: () => ProgramsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/admin/schedules': typeof AdminSchedulesRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -101,6 +109,7 @@ export interface FileRoutesByTo {
   '/admin/schedules': typeof AdminSchedulesRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -115,6 +124,7 @@ export interface FileRoutesById {
   '/admin/schedules': typeof AdminSchedulesRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
     | '/admin/schedules'
     | '/programs/$slug'
     | '/admin/'
+    | '/programs/ai-business-growth/curriculum'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -142,6 +153,7 @@ export interface FileRouteTypes {
     | '/admin/schedules'
     | '/programs/$slug'
     | '/admin'
+    | '/programs/ai-business-growth/curriculum'
   id:
     | '__root__'
     | '/'
@@ -155,6 +167,7 @@ export interface FileRouteTypes {
     | '/admin/schedules'
     | '/programs/$slug'
     | '/admin/'
+    | '/programs/ai-business-growth/curriculum'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -244,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEnquiriesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/programs/ai-business-growth/curriculum': {
+      id: '/programs/ai-business-growth/curriculum'
+      path: '/ai-business-growth/curriculum'
+      fullPath: '/programs/ai-business-growth/curriculum'
+      preLoaderRoute: typeof ProgramsAiBusinessGrowthCurriculumRouteImport
+      parentRoute: typeof ProgramsRoute
+    }
   }
 }
 
@@ -267,10 +287,13 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface ProgramsRouteChildren {
   ProgramsSlugRoute: typeof ProgramsSlugRoute
+  ProgramsAiBusinessGrowthCurriculumRoute: typeof ProgramsAiBusinessGrowthCurriculumRoute
 }
 
 const ProgramsRouteChildren: ProgramsRouteChildren = {
   ProgramsSlugRoute: ProgramsSlugRoute,
+  ProgramsAiBusinessGrowthCurriculumRoute:
+    ProgramsAiBusinessGrowthCurriculumRoute,
 }
 
 const ProgramsRouteWithChildren = ProgramsRoute._addFileChildren(
