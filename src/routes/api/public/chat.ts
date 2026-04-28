@@ -141,20 +141,6 @@ export const Route = createFileRoute("/api/public/chat")({
             );
           }
 
-          // Best-effort logging (non-blocking, ignore failures)
-          try {
-            const lastUser = [...messages].reverse().find((m) => m.role === "user");
-            if (lastUser) {
-              void supabaseAdmin
-                .from("chat_logs")
-                .insert({ user_message: lastUser.content })
-                .then(() => {})
-                .catch(() => {});
-            }
-          } catch {
-            /* table may not exist; ignore */
-          }
-
           return new Response(upstream.body, {
             headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
           });
