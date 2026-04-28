@@ -77,32 +77,50 @@ function Index() {
           </Link>
         </div>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {(programs as Program[]).map((p) => (
-            <Link
-              key={p.id}
-              to="/programs/$slug"
-              params={{ slug: p.slug }}
-              className="group relative flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-accent/60 hover:shadow-elegant"
-            >
-              {p.featured && (
-                <span className="absolute right-4 top-4 rounded-full bg-accent/15 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-accent-foreground">
-                  Featured
-                </span>
-              )}
-              <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-gold shadow-gold">
-                <ProgramIcon name={p.icon} className="h-6 w-6 text-navy" />
+          {(programs as Program[]).map((p) => {
+            const isAIBG = p.slug === "ai-business-growth";
+            const cardClass = "group relative flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all " +
+              (isAIBG ? "hover:-translate-y-1 hover:border-accent/60 hover:shadow-elegant" : "opacity-90");
+            const inner = (
+              <>
+                {p.featured && (
+                  <span className="absolute right-4 top-4 rounded-full bg-accent/15 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-accent-foreground">
+                    Featured
+                  </span>
+                )}
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-gold shadow-gold">
+                  <ProgramIcon name={p.icon} className="h-6 w-6 text-navy" />
+                </div>
+                <h3 className="mt-5 font-display text-xl">{p.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{p.audience}</p>
+                <p className="mt-3 text-sm text-foreground/80">{p.outcome}</p>
+                <div className="mt-5 flex items-center justify-between border-t border-border pt-4 text-sm">
+                  <span className="text-muted-foreground">{p.duration}</span>
+                  {isAIBG ? (
+                    <span className="inline-flex items-center gap-1 font-medium text-foreground group-hover:text-accent">
+                      Click to Register Now <ArrowRight className="h-4 w-4" />
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Coming Soon
+                    </span>
+                  )}
+                </div>
+              </>
+            );
+            if (isAIBG) {
+              return (
+                <Link key={p.id} to="/programs/ai-business-growth/curriculum" className={cardClass}>
+                  {inner}
+                </Link>
+              );
+            }
+            return (
+              <div key={p.id} className={cardClass} aria-disabled="true">
+                {inner}
               </div>
-              <h3 className="mt-5 font-display text-xl">{p.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{p.audience}</p>
-              <p className="mt-3 text-sm text-foreground/80">{p.outcome}</p>
-              <div className="mt-5 flex items-center justify-between border-t border-border pt-4 text-sm">
-                <span className="text-muted-foreground">{p.duration}</span>
-                <span className="inline-flex items-center gap-1 font-medium text-foreground group-hover:text-accent">
-                  Click to Register Now <ArrowRight className="h-4 w-4" />
-                </span>
-              </div>
-            </Link>
-          ))}
+            );
+          })}
         </div>
       </section>
 
