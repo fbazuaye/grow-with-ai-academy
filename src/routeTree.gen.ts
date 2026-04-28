@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as RegisterAiBusinessGrowthRouteImport } from './routes/register.ai-business-growth'
 import { Route as ProgramsSlugRouteImport } from './routes/programs.$slug'
 import { Route as AiBusinessGrowthCurriculumRouteImport } from './routes/ai-business-growth.curriculum'
 import { Route as AdminSchedulesRouteImport } from './routes/admin.schedules'
@@ -54,6 +55,12 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const RegisterAiBusinessGrowthRoute =
+  RegisterAiBusinessGrowthRouteImport.update({
+    id: '/register/ai-business-growth',
+    path: '/register/ai-business-growth',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ProgramsSlugRoute = ProgramsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -109,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/admin/schedules': typeof AdminSchedulesRoute
   '/ai-business-growth/curriculum': typeof AiBusinessGrowthCurriculumRoute
   '/programs/$slug': typeof ProgramsSlugRoute
+  '/register/ai-business-growth': typeof RegisterAiBusinessGrowthRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
@@ -124,6 +132,7 @@ export interface FileRoutesByTo {
   '/admin/schedules': typeof AdminSchedulesRoute
   '/ai-business-growth/curriculum': typeof AiBusinessGrowthCurriculumRoute
   '/programs/$slug': typeof ProgramsSlugRoute
+  '/register/ai-business-growth': typeof RegisterAiBusinessGrowthRoute
   '/admin': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
@@ -141,6 +150,7 @@ export interface FileRoutesById {
   '/admin/schedules': typeof AdminSchedulesRoute
   '/ai-business-growth/curriculum': typeof AiBusinessGrowthCurriculumRoute
   '/programs/$slug': typeof ProgramsSlugRoute
+  '/register/ai-business-growth': typeof RegisterAiBusinessGrowthRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/programs_/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/admin/schedules'
     | '/ai-business-growth/curriculum'
     | '/programs/$slug'
+    | '/register/ai-business-growth'
     | '/admin/'
     | '/api/public/chat'
     | '/programs/ai-business-growth/curriculum'
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/admin/schedules'
     | '/ai-business-growth/curriculum'
     | '/programs/$slug'
+    | '/register/ai-business-growth'
     | '/admin'
     | '/api/public/chat'
     | '/programs/ai-business-growth/curriculum'
@@ -190,6 +202,7 @@ export interface FileRouteTypes {
     | '/admin/schedules'
     | '/ai-business-growth/curriculum'
     | '/programs/$slug'
+    | '/register/ai-business-growth'
     | '/admin/'
     | '/api/public/chat'
     | '/programs_/ai-business-growth/curriculum'
@@ -202,6 +215,7 @@ export interface RootRouteChildren {
   EnquireRoute: typeof EnquireRoute
   ProgramsRoute: typeof ProgramsRouteWithChildren
   AiBusinessGrowthCurriculumRoute: typeof AiBusinessGrowthCurriculumRoute
+  RegisterAiBusinessGrowthRoute: typeof RegisterAiBusinessGrowthRoute
   ApiPublicChatRoute: typeof ApiPublicChatRoute
   ProgramsAiBusinessGrowthCurriculumRoute: typeof ProgramsAiBusinessGrowthCurriculumRoute
 }
@@ -249,6 +263,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/register/ai-business-growth': {
+      id: '/register/ai-business-growth'
+      path: '/register/ai-business-growth'
+      fullPath: '/register/ai-business-growth'
+      preLoaderRoute: typeof RegisterAiBusinessGrowthRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/programs/$slug': {
       id: '/programs/$slug'
@@ -346,6 +367,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnquireRoute: EnquireRoute,
   ProgramsRoute: ProgramsRouteWithChildren,
   AiBusinessGrowthCurriculumRoute: AiBusinessGrowthCurriculumRoute,
+  RegisterAiBusinessGrowthRoute: RegisterAiBusinessGrowthRoute,
   ApiPublicChatRoute: ApiPublicChatRoute,
   ProgramsAiBusinessGrowthCurriculumRoute:
     ProgramsAiBusinessGrowthCurriculumRoute,

@@ -110,7 +110,7 @@ function Index() {
             );
             if (isAIBG) {
               return (
-                <Link key={p.id} to="/programs/ai-business-growth/curriculum" className={cardClass}>
+                <Link key={p.id} to="/register/ai-business-growth" className={cardClass}>
                   {inner}
                 </Link>
               );

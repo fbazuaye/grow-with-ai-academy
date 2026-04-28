@@ -56,7 +56,7 @@ function ProgramsPage() {
           );
           if (isAIBG) {
             return (
-              <Link key={p.id} to="/programs/ai-business-growth/curriculum" className={className}>
+              <Link key={p.id} to="/register/ai-business-growth" className={className}>
                 {inner}
               </Link>
             );
