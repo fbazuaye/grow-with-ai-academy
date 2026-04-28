@@ -59,9 +59,16 @@ function ProgramsPage() {
               </div>
             </>
           );
-          if (isRegisterable) {
+          if (p.slug === "ai-business-growth") {
             return (
-              <Link key={p.id} to={registerSlug!} className={className}>
+              <Link key={p.id} to="/register/ai-business-growth" className={className}>
+                {inner}
+              </Link>
+            );
+          }
+          if (p.slug === "ai-video-teens") {
+            return (
+              <Link key={p.id} to="/register/ai-video-teens" className={className}>
                 {inner}
               </Link>
             );
