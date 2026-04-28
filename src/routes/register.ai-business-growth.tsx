@@ -77,8 +77,12 @@ function RegisterPage() {
       toast.error("Could not submit your registration. Please try again.");
       return;
     }
-    toast.success("Registration received! We'll be in touch shortly.");
+    toast.success("Registration received! Redirecting to payment…");
     setDone(true);
+    // Redirect to Paystack to complete payment
+    setTimeout(() => {
+      window.location.href = "https://paystack.shop/pay/rdfvc8sgdi";
+    }, 1200);
   }
 
   if (done) {
