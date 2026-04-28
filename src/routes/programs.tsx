@@ -47,7 +47,7 @@ function ProgramsPage() {
               <p className="mt-3 flex-1 text-sm text-foreground/80">{p.outcome}</p>
               <div className="mt-5 flex items-center justify-between border-t border-border pt-4 text-sm">
                 <span className="text-muted-foreground">{p.duration}</span>
-                {isAIBG ? (
+                {isRegisterable ? (
                   <span className="inline-flex items-center gap-1 font-medium group-hover:text-accent">
                     Click to Register Now <ArrowRight className="h-4 w-4" />
                   </span>
@@ -59,9 +59,9 @@ function ProgramsPage() {
               </div>
             </>
           );
-          if (isAIBG) {
+          if (isRegisterable) {
             return (
-              <Link key={p.id} to="/register/ai-business-growth" className={className}>
+              <Link key={p.id} to={registerSlug!} className={className}>
                 {inner}
               </Link>
             );
