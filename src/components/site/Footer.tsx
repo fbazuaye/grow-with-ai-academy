@@ -26,8 +26,12 @@ export function Footer() {
           </p>
         </div>
       </div>
-      <div className="border-t border-white/10 py-5 text-center text-xs text-primary-foreground/60">
-        © {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
+      <div className="space-y-1 border-t border-white/10 py-5 text-center text-xs text-primary-foreground/60">
+        <p>© {new Date().getFullYear()} {SITE_NAME}. All rights reserved.</p>
+        <p>
+          Designed by <span className="font-medium text-primary-foreground/80">Frank Bazuaye</span> · Powered by{" "}
+          <span className="font-medium text-accent">LiveGig Ltd</span>
+        </p>
       </div>
     </footer>
   );
