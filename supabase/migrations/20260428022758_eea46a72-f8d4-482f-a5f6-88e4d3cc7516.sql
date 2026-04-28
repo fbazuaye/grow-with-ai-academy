@@ -1,0 +1,1 @@
+UPDATE public.programs SET duration = '2 Saturdays · Live cohort' WHERE slug = 'ai-business-growth';
