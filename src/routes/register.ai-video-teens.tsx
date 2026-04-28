@@ -160,7 +160,7 @@ function RegisterPage() {
               Limited seats so every teen gets feedback on their videos. Reserve early.
             </p>
             <Button asChild variant="outline" size="sm" className="mt-4">
-              <Link to="/programs_/ai-video-teens/curriculum">View full curriculum →</Link>
+              <Link to="/programs/ai-video-teens/curriculum">View full curriculum →</Link>
             </Button>
           </div>
         </aside>
