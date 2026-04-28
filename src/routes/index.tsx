@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, Quote, Star } from "lucide-react";
+import { ArrowRight, Check, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { fetchPrograms, type Program } from "@/lib/programs";
 import { ProgramIcon } from "@/components/site/ProgramIcon";
@@ -124,29 +124,7 @@ function Index() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="bg-secondary/60 py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">What learners say</p>
-          <h2 className="mt-2 font-display text-3xl md:text-4xl">Stories from our cohorts</h2>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {[
-              { name: "Amaka O.", role: "Boutique owner, Lagos", quote: "Doubled my Instagram leads in 3 weeks using the prompts and content templates." },
-              { name: "Tunde A.", role: "Career switcher", quote: "Landed a remote role 6 weeks after the cohort. The CV and interview prep were gold." },
-              { name: "Chioma N.", role: "Freelance copywriter", quote: "I now charge in dollars. Got my first international client within the program." },
-            ].map((t) => (
-              <figure key={t.name} className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-                <Quote className="h-6 w-6 text-accent" />
-                <blockquote className="mt-3 text-sm text-foreground/85">"{t.quote}"</blockquote>
-                <figcaption className="mt-5 text-sm">
-                  <div className="font-semibold">{t.name}</div>
-                  <div className="text-muted-foreground">{t.role}</div>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* TESTIMONIALS section removed — will be added once real learner stories are available. */}
 
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-4 py-20">
