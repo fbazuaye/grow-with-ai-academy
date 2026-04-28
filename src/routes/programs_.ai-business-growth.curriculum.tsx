@@ -134,17 +134,22 @@ const bonuses = [
 ];
 
 function useCountdown(target: number) {
-  const [now, setNow] = useState<number>(() => Date.now());
+  // Start at null on both server and first client render to avoid hydration mismatches.
+  const [now, setNow] = useState<number | null>(null);
   useEffect(() => {
+    setNow(Date.now());
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
+  if (now === null) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0, ended: false, ready: false };
+  }
   const diff = Math.max(0, target - now);
   const days = Math.floor(diff / 86_400_000);
   const hours = Math.floor((diff % 86_400_000) / 3_600_000);
   const minutes = Math.floor((diff % 3_600_000) / 60_000);
   const seconds = Math.floor((diff % 60_000) / 1000);
-  return { days, hours, minutes, seconds, ended: diff === 0 };
+  return { days, hours, minutes, seconds, ended: diff === 0, ready: true };
 }
 
 function CountdownBox({ value, label }: { value: number; label: string }) {
@@ -159,7 +164,7 @@ function CountdownBox({ value, label }: { value: number; label: string }) {
 }
 
 function CurriculumPage() {
-  const { days, hours, minutes, seconds, ended } = useCountdown(CLASS_START);
+  const { days, hours, minutes, seconds, ended, ready } = useCountdown(CLASS_START);
   const cta = whatsappLink("AI for Business Growth — 2 Saturdays (4 & 11 July 2026)");
 
   return (
@@ -204,11 +209,22 @@ function CurriculumPage() {
               <div className="text-xs uppercase tracking-widest opacity-80 mb-3">
                 {ended ? "Class is live" : "Class starts in"}
               </div>
-              <div className="flex flex-wrap gap-2 sm:gap-3">
-                <CountdownBox value={days} label="Days" />
-                <CountdownBox value={hours} label="Hours" />
-                <CountdownBox value={minutes} label="Minutes" />
-                <CountdownBox value={seconds} label="Seconds" />
+              <div className="flex flex-wrap gap-2 sm:gap-3" suppressHydrationWarning>
+                {ready ? (
+                  <>
+                    <CountdownBox value={days} label="Days" />
+                    <CountdownBox value={hours} label="Hours" />
+                    <CountdownBox value={minutes} label="Minutes" />
+                    <CountdownBox value={seconds} label="Seconds" />
+                  </>
+                ) : (
+                  <>
+                    <CountdownBox value={0} label="Days" />
+                    <CountdownBox value={0} label="Hours" />
+                    <CountdownBox value={0} label="Minutes" />
+                    <CountdownBox value={0} label="Seconds" />
+                  </>
+                )}
               </div>
             </div>
 
