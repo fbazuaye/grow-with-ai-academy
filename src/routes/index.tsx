@@ -78,9 +78,9 @@ function Index() {
         </div>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {(programs as Program[]).map((p) => {
-            const isAIBG = p.slug === "ai-business-growth";
+            const isRegisterable = p.slug === "ai-business-growth" || p.slug === "ai-video-teens";
             const cardClass = "group relative flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all " +
-              (isAIBG ? "hover:-translate-y-1 hover:border-accent/60 hover:shadow-elegant" : "opacity-90");
+              (isRegisterable ? "hover:-translate-y-1 hover:border-accent/60 hover:shadow-elegant" : "opacity-90");
             const inner = (
               <>
                 {p.featured && (
@@ -96,7 +96,7 @@ function Index() {
                 <p className="mt-3 text-sm text-foreground/80">{p.outcome}</p>
                 <div className="mt-5 flex items-center justify-between border-t border-border pt-4 text-sm">
                   <span className="text-muted-foreground">{p.duration}</span>
-                  {isAIBG ? (
+                  {isRegisterable ? (
                     <span className="inline-flex items-center gap-1 font-medium text-foreground group-hover:text-accent">
                       Click to Register Now <ArrowRight className="h-4 w-4" />
                     </span>
@@ -108,9 +108,16 @@ function Index() {
                 </div>
               </>
             );
-            if (isAIBG) {
+            if (p.slug === "ai-business-growth") {
               return (
                 <Link key={p.id} to="/register/ai-business-growth" className={cardClass}>
+                  {inner}
+                </Link>
+              );
+            }
+            if (p.slug === "ai-video-teens") {
+              return (
+                <Link key={p.id} to="/register/ai-video-teens" className={cardClass}>
                   {inner}
                 </Link>
               );
