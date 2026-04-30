@@ -1,80 +1,87 @@
-# Code-side AI Discoverability Improvements
+# Plan: GEO Visitor Analytics on Admin Dashboard
 
-Implement the high-impact code changes that help LLMs and AI search engines (ChatGPT Search, Perplexity, Google AI Overviews, Bing Copilot) discover, parse, and cite this site faster and more reliably.
+Track every public page visit with geographic location and surface it inside the existing **Admin** area as a new "Visitors" section.
 
-## What this delivers
+## What you'll see (Admin → Visitors)
 
-1. **Fix the SSR/hydration warning** in `__root.tsx` so server-rendered HTML (which is what bots and LLM crawlers actually read) is clean and consistent.
-2. **A real `/faq` page** with `FAQPage` JSON-LD — the single highest-leverage page format for AI answer engines, since they extract Q&A pairs verbatim.
-3. **IndexNow integration** so Bing/Copilot/Yandex (and tools that pull from them) get notified instantly when content changes, instead of waiting weeks for a crawl.
-4. **Tighter root metadata** — site-wide title template + a default `og:image` referenced from absolute URL so social/AI cards never break.
-5. **Brand-consistent `og:image` per program** — register and curriculum pages reuse the program hero so AI answer cards have a relevant image.
+- **KPI cards**: Total visits, unique visitors, top country, top page (with 7d / 30d / 90d toggle)
+- **Daily visits trend** — line chart
+- **Top countries** — bar chart + table with flag emojis and visit counts
+- **Top cities** — table
+- **Top pages** — table with visit counts
+- **Top referrers** — where traffic comes from (Google, direct, social, etc.)
 
----
+Plus a small **"Visitors (last 7d)"** summary card on the Admin **Overview** page that links to the full Visitors view.
 
-## Changes
+## How it works
 
-### 1. Fix root SSR shell (`src/routes/__root.tsx`)
-- Add `suppressHydrationWarning` on `<html>` and `<body>` to prevent hydration mismatch warnings from theme/font scripts.
-- Add a `titleTemplate`-style default by setting a generic `title` only when child routes don't override (already works via TanStack head dedup — just clean wording).
-- Ensure `og:url` and canonical are present at the root with absolute URLs from `SITE_URL` in `src/lib/seo.ts`.
+```text
+Public page loads
+      │
+      ▼
+src/lib/analytics.ts  ── sendBeacon ──►  POST /api/public/track
+                                              │
+                                              ├─ reads CF-IPCountry header (country)
+                                              ├─ enriches with ipapi.co (region, city)
+                                              ├─ hashes IP+UA+date → visitor_hash
+                                              ▼
+                                         page_views table
+                                              │
+                                              ▼
+                                  Admin → Visitors (charts + tables)
+```
 
-### 2. New `/faq` route (`src/routes/faq.tsx`)
-- Curated FAQ covering: what programs are offered, who they're for, AI Business Growth details, AI Video Bootcamp for Teens details, pricing, schedule/cohort, location (Lagos, Nigeria), delivery (live online), certificate, refund policy, how to register, payment methods, prerequisites.
-- Render visible Q&A (accordion using existing `@/components/ui/accordion`).
-- Inject `FAQPage` JSON-LD via existing `src/lib/schema.ts` (`faqPageSchema(items)` helper — add if missing).
-- `head()` with route-specific title, description, canonical, og tags, and `BreadcrumbList` JSON-LD.
-- Add `/faq` to `src/routes/sitemap[.]xml.tsx`.
-- Add a Footer link to `/faq` in `src/components/site/Footer.tsx`.
+## Technical details
 
-### 3. IndexNow (`public/<key>.txt` + `src/routes/api/public/indexnow-ping.ts`)
-- Generate a stable IndexNow key (32-char hex), commit it as `public/<key>.txt` containing the same key (per IndexNow spec).
-- Add a small server route `POST /api/public/indexnow-ping` that accepts `{ urls: string[] }` (Zod-validated, max 50) and forwards to `https://api.indexnow.org/indexnow` with the site host + key. No auth required (it's a fan-out helper) but rate-limit by capping URL count and validating each URL belongs to `SITE_URL`.
-- Document usage in `public/llms.txt` (one line) — not user-facing.
-- Optional: trigger automatically from sitemap render (skip for now to keep scope tight; manual trigger is enough).
+### 1. Database migration — `page_views` table
+- `id` uuid pk, `created_at` timestamptz default now()
+- `path` text, `referrer` text, `referrer_host` text
+- `country` text (ISO-2), `region` text, `city` text
+- `visitor_hash` text (sha256, daily-rotating — privacy-friendly unique counter)
+- `user_agent` text
+- Indexes: `created_at`, `country`, `path`
+- **RLS**: SELECT restricted to admins via `private.has_role(auth.uid(), 'admin')`. No public INSERT policy — inserts go through `supabaseAdmin` in the server route.
 
-### 4. Root metadata polish (`src/routes/__root.tsx` + `src/lib/seo.ts`)
-- Move all OG/Twitter image URLs to absolute (already absolute — just confirm).
-- Add `og:site_name`, `og:locale` (`en_NG`), and `twitter:site` placeholder (omit handle if unknown).
-- Ensure every page that uses `buildHead()` gets a canonical link automatically (already implemented — verify all current routes call it; patch the two that don't if any).
+### 2. Server route — `src/routes/api/public/track.ts`
+- POST, accepts `{ path, referrer }` validated with Zod (path ≤ 512 chars).
+- Skips if `path` starts with `/admin` or `/api`.
+- Reads country from `CF-IPCountry` request header.
+- Optional fetch to `https://ipapi.co/{ip}/json/` for region + city (fails silently — country still recorded).
+- Computes `visitor_hash = sha256(ip + ua + YYYY-MM-DD)`.
+- Inserts via `supabaseAdmin`, returns `204` quickly.
 
-### 5. Per-program `og:image` (`src/routes/register.*.tsx`, `src/routes/programs_.*.curriculum.tsx`)
-- Each program page already references a hero image. Pass that same absolute URL into `buildHead({ ogImage })` so social/AI cards show the program-specific image rather than the global default.
+### 3. Client tracker — `src/lib/analytics.ts`
+- `useTrackPageView()` hook subscribes to `useLocation()` and fires once per route change via `navigator.sendBeacon` (falls back to `fetch` with `keepalive`).
+- Skips `/admin/*`, `/auth`, and bots (`navigator.webdriver`).
+- Mounted once in `src/routes/__root.tsx` inside `RootComponent`.
 
----
+### 4. Admin "Visitors" page — `src/routes/admin.visitors.tsx`
+- Range selector (7 / 30 / 90 days).
+- Server function `getVisitorAnalytics` (uses `requireSupabaseAuth` + admin check) returns aggregated buckets so we never ship raw rows to the browser.
+- Recharts: line chart (daily) + bar chart (top countries).
+- Tables for cities, pages, referrers. Country names + flag emoji from ISO-2 code (small local helper, no extra dep).
 
-## Files to create
+### 5. Admin nav + overview
+- Add `{ to: "/admin/visitors", label: "Visitors", icon: Globe }` to `NAV` in `src/routes/admin.tsx`.
+- Add a compact "Visitors (7d)" card to `src/routes/admin.index.tsx`.
 
-- `src/routes/faq.tsx`
-- `src/routes/api/public/indexnow-ping.ts`
-- `public/<indexnow-key>.txt`
+### 6. Files
 
-## Files to edit
+**New**
+- `supabase/migrations/<ts>_page_views.sql`
+- `src/routes/api/public/track.ts`
+- `src/lib/analytics.ts`
+- `src/server/analytics.functions.ts` (aggregation server fns)
+- `src/routes/admin.visitors.tsx`
 
-- `src/routes/__root.tsx` — hydration suppression, `og:site_name`/`og:locale`
-- `src/lib/schema.ts` — add `faqPageSchema()` helper if not present
-- `src/lib/seo.ts` — accept and emit `ogImage` option (if not already)
-- `src/routes/sitemap[.]xml.tsx` — add `/faq`
-- `src/components/site/Footer.tsx` — add FAQ link
-- `src/routes/register.ai-business-growth.tsx` — pass program hero as `ogImage`
-- `src/routes/register.ai-video-teens.tsx` — same
-- `src/routes/programs_.ai-business-growth.curriculum.tsx` — same
-- `src/routes/programs_.ai-video-teens.curriculum.tsx` — same
-- `public/llms.txt` — append `/faq` to the page list
+**Edited**
+- `src/routes/__root.tsx` — mount `useTrackPageView()`
+- `src/routes/admin.tsx` — add Visitors nav link
+- `src/routes/admin.index.tsx` — add 7d visitors card
+- `src/routeTree.gen.ts` — auto-regenerated
 
----
+## Notes
 
-## Out of scope (intentionally)
-
-- Backlinks, directory submissions, social profiles — these are external/off-platform actions you do, not code.
-- Google Search Console / Bing Webmaster verification — requires you to add a DNS or meta verification token; happy to add the meta tag once you have it.
-- Auto-pinging IndexNow on every content change — keeping the helper manual for now.
-
-## Notes for non-technical readers
-
-After this ships, AI engines (ChatGPT Search, Perplexity, Copilot, Google AI Overviews) will have:
-- A clean, machine-readable FAQ page they can quote directly when someone asks "What does AI Mastery Academy teach?" or "How much is the AI Video Bootcamp for Teens?"
-- A fast notification channel (IndexNow) so Bing/Copilot index new pages within minutes instead of weeks.
-- Program-specific share images so AI-generated answer cards look correct.
-
-You should still expect 2–4 weeks before AI engines reliably cite a brand-new domain — code can't shortcut crawler trust, but it removes every technical reason for them to skip the site.
+- Works on Lovable hosting (server routes + edge `CF-IPCountry`). On a static Netlify deploy the `/api/public/track` endpoint won't run, so analytics silently no-ops there.
+- No paid services. ipapi.co free tier (~1k/day) covers region/city; country always works via the edge header.
+- No PII stored — IPs are never written to the DB, only the daily-rotated hash.

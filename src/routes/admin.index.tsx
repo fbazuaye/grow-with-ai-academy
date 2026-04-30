@@ -1,7 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { BookOpen, Calendar, Tag, Inbox } from "lucide-react";
+import { BookOpen, Calendar, Tag, Inbox, Globe } from "lucide-react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -34,7 +34,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 function AdminOverview() {
-  const [counts, setCounts] = useState({ programs: 0, schedules: 0, tiers: 0, enquiries: 0, newEnquiries: 0 });
+  const [counts, setCounts] = useState({ programs: 0, schedules: 0, tiers: 0, enquiries: 0, newEnquiries: 0, visits7d: 0, uniques7d: 0 });
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -42,7 +42,9 @@ function AdminOverview() {
     (async () => {
       const since = new Date();
       since.setDate(since.getDate() - 29);
-      const [p, s, t, e, n, list] = await Promise.all([
+      const since7 = new Date();
+      since7.setDate(since7.getDate() - 7);
+      const [p, s, t, e, n, list, pv] = await Promise.all([
         supabase.from("programs").select("*", { count: "exact", head: true }),
         supabase.from("schedules").select("*", { count: "exact", head: true }),
         supabase.from("pricing_tiers").select("*", { count: "exact", head: true }),
@@ -53,13 +55,21 @@ function AdminOverview() {
           .select("id,status,program_title,created_at")
           .gte("created_at", since.toISOString())
           .order("created_at", { ascending: true }),
+        supabase
+          .from("page_views")
+          .select("visitor_hash")
+          .gte("created_at", since7.toISOString())
+          .limit(10000),
       ]);
+      const pvRows = (pv.data ?? []) as { visitor_hash: string | null }[];
       setCounts({
         programs: p.count ?? 0,
         schedules: s.count ?? 0,
         tiers: t.count ?? 0,
         enquiries: e.count ?? 0,
         newEnquiries: n.count ?? 0,
+        visits7d: pvRows.length,
+        uniques7d: new Set(pvRows.map((r) => r.visitor_hash).filter(Boolean)).size,
       });
       setEnquiries((list.data ?? []) as Enquiry[]);
       setLoading(false);
@@ -128,6 +138,25 @@ function AdminOverview() {
           </div>
         ))}
       </div>
+
+      <Link
+        to="/admin/visitors"
+        className="mt-4 flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:border-accent"
+      >
+        <div className="flex items-center gap-3">
+          <span className="grid h-10 w-10 place-items-center rounded-lg bg-gradient-gold shadow-gold">
+            <Globe className="h-5 w-5 text-navy" />
+          </span>
+          <div>
+            <p className="text-sm font-medium">Visitors (last 7 days)</p>
+            <p className="text-xs text-muted-foreground">Geographic analytics — country, city, top pages</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="font-display text-2xl">{loading ? "—" : counts.visits7d}</p>
+          <p className="text-xs text-muted-foreground">{loading ? "" : `${counts.uniques7d} unique`}</p>
+        </div>
+      </Link>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <div className="rounded-xl border border-border bg-card p-5">

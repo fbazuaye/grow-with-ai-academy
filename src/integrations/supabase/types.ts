@@ -61,6 +61,45 @@ export type Database = {
           },
         ]
       }
+      page_views: {
+        Row: {
+          city: string | null
+          country: string | null
+          created_at: string
+          id: string
+          path: string
+          referrer: string | null
+          referrer_host: string | null
+          region: string | null
+          user_agent: string | null
+          visitor_hash: string | null
+        }
+        Insert: {
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          path: string
+          referrer?: string | null
+          referrer_host?: string | null
+          region?: string | null
+          user_agent?: string | null
+          visitor_hash?: string | null
+        }
+        Update: {
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          path?: string
+          referrer?: string | null
+          referrer_host?: string | null
+          region?: string | null
+          user_agent?: string | null
+          visitor_hash?: string | null
+        }
+        Relationships: []
+      }
       pricing_tiers: {
         Row: {
           created_at: string

@@ -4,6 +4,7 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { ChatWidget } from "@/components/site/ChatWidget";
 import { organizationSchema, jsonLdScript } from "@/lib/schema";
+import { useTrackPageView } from "@/lib/analytics";
 
 import appCss from "../styles.css?url";
 
@@ -76,6 +77,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  useTrackPageView();
   return (
     <div className="flex min-h-screen flex-col">
       <Header />

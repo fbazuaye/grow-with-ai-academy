@@ -22,12 +22,14 @@ import { Route as RegisterAiVideoTeensRouteImport } from './routes/register.ai-v
 import { Route as RegisterAiBusinessGrowthRouteImport } from './routes/register.ai-business-growth'
 import { Route as ProgramsSlugRouteImport } from './routes/programs.$slug'
 import { Route as AiBusinessGrowthCurriculumRouteImport } from './routes/ai-business-growth.curriculum'
+import { Route as AdminVisitorsRouteImport } from './routes/admin.visitors'
 import { Route as AdminSchedulesRouteImport } from './routes/admin.schedules'
 import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
 import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
 import { Route as AdminEnquiriesRouteImport } from './routes/admin.enquiries'
 import { Route as ProgramsAiVideoTeensCurriculumRouteImport } from './routes/programs_.ai-video-teens.curriculum'
 import { Route as ProgramsAiBusinessGrowthCurriculumRouteImport } from './routes/programs_.ai-business-growth.curriculum'
+import { Route as ApiPublicTrackRouteImport } from './routes/api/public/track'
 import { Route as ApiPublicIndexnowPingRouteImport } from './routes/api/public/indexnow-ping'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 
@@ -98,6 +100,11 @@ const AiBusinessGrowthCurriculumRoute =
     path: '/ai-business-growth/curriculum',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AdminVisitorsRoute = AdminVisitorsRouteImport.update({
+  id: '/visitors',
+  path: '/visitors',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSchedulesRoute = AdminSchedulesRouteImport.update({
   id: '/schedules',
   path: '/schedules',
@@ -130,6 +137,11 @@ const ProgramsAiBusinessGrowthCurriculumRoute =
     path: '/programs/ai-business-growth/curriculum',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicTrackRoute = ApiPublicTrackRouteImport.update({
+  id: '/api/public/track',
+  path: '/api/public/track',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicIndexnowPingRoute = ApiPublicIndexnowPingRouteImport.update({
   id: '/api/public/indexnow-ping',
   path: '/api/public/indexnow-ping',
@@ -154,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/schedules': typeof AdminSchedulesRoute
+  '/admin/visitors': typeof AdminVisitorsRoute
   '/ai-business-growth/curriculum': typeof AiBusinessGrowthCurriculumRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/register/ai-business-growth': typeof RegisterAiBusinessGrowthRoute
@@ -161,6 +174,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/indexnow-ping': typeof ApiPublicIndexnowPingRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
   '/programs/ai-video-teens/curriculum': typeof ProgramsAiVideoTeensCurriculumRoute
 }
@@ -176,6 +190,7 @@ export interface FileRoutesByTo {
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/schedules': typeof AdminSchedulesRoute
+  '/admin/visitors': typeof AdminVisitorsRoute
   '/ai-business-growth/curriculum': typeof AiBusinessGrowthCurriculumRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/register/ai-business-growth': typeof RegisterAiBusinessGrowthRoute
@@ -183,6 +198,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/indexnow-ping': typeof ApiPublicIndexnowPingRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
   '/programs/ai-video-teens/curriculum': typeof ProgramsAiVideoTeensCurriculumRoute
 }
@@ -200,6 +216,7 @@ export interface FileRoutesById {
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/schedules': typeof AdminSchedulesRoute
+  '/admin/visitors': typeof AdminVisitorsRoute
   '/ai-business-growth/curriculum': typeof AiBusinessGrowthCurriculumRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/register/ai-business-growth': typeof RegisterAiBusinessGrowthRoute
@@ -207,6 +224,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/indexnow-ping': typeof ApiPublicIndexnowPingRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/programs_/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
   '/programs_/ai-video-teens/curriculum': typeof ProgramsAiVideoTeensCurriculumRoute
 }
@@ -225,6 +243,7 @@ export interface FileRouteTypes {
     | '/admin/pricing'
     | '/admin/programs'
     | '/admin/schedules'
+    | '/admin/visitors'
     | '/ai-business-growth/curriculum'
     | '/programs/$slug'
     | '/register/ai-business-growth'
@@ -232,6 +251,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/api/public/chat'
     | '/api/public/indexnow-ping'
+    | '/api/public/track'
     | '/programs/ai-business-growth/curriculum'
     | '/programs/ai-video-teens/curriculum'
   fileRoutesByTo: FileRoutesByTo
@@ -247,6 +267,7 @@ export interface FileRouteTypes {
     | '/admin/pricing'
     | '/admin/programs'
     | '/admin/schedules'
+    | '/admin/visitors'
     | '/ai-business-growth/curriculum'
     | '/programs/$slug'
     | '/register/ai-business-growth'
@@ -254,6 +275,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/api/public/chat'
     | '/api/public/indexnow-ping'
+    | '/api/public/track'
     | '/programs/ai-business-growth/curriculum'
     | '/programs/ai-video-teens/curriculum'
   id:
@@ -270,6 +292,7 @@ export interface FileRouteTypes {
     | '/admin/pricing'
     | '/admin/programs'
     | '/admin/schedules'
+    | '/admin/visitors'
     | '/ai-business-growth/curriculum'
     | '/programs/$slug'
     | '/register/ai-business-growth'
@@ -277,6 +300,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/api/public/chat'
     | '/api/public/indexnow-ping'
+    | '/api/public/track'
     | '/programs_/ai-business-growth/curriculum'
     | '/programs_/ai-video-teens/curriculum'
   fileRoutesById: FileRoutesById
@@ -295,6 +319,7 @@ export interface RootRouteChildren {
   RegisterAiVideoTeensRoute: typeof RegisterAiVideoTeensRoute
   ApiPublicChatRoute: typeof ApiPublicChatRoute
   ApiPublicIndexnowPingRoute: typeof ApiPublicIndexnowPingRoute
+  ApiPublicTrackRoute: typeof ApiPublicTrackRoute
   ProgramsAiBusinessGrowthCurriculumRoute: typeof ProgramsAiBusinessGrowthCurriculumRoute
   ProgramsAiVideoTeensCurriculumRoute: typeof ProgramsAiVideoTeensCurriculumRoute
 }
@@ -392,6 +417,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AiBusinessGrowthCurriculumRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/visitors': {
+      id: '/admin/visitors'
+      path: '/visitors'
+      fullPath: '/admin/visitors'
+      preLoaderRoute: typeof AdminVisitorsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/schedules': {
       id: '/admin/schedules'
       path: '/schedules'
@@ -434,6 +466,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsAiBusinessGrowthCurriculumRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/track': {
+      id: '/api/public/track'
+      path: '/api/public/track'
+      fullPath: '/api/public/track'
+      preLoaderRoute: typeof ApiPublicTrackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/indexnow-ping': {
       id: '/api/public/indexnow-ping'
       path: '/api/public/indexnow-ping'
@@ -456,6 +495,7 @@ interface AdminRouteChildren {
   AdminPricingRoute: typeof AdminPricingRoute
   AdminProgramsRoute: typeof AdminProgramsRoute
   AdminSchedulesRoute: typeof AdminSchedulesRoute
+  AdminVisitorsRoute: typeof AdminVisitorsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -464,6 +504,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPricingRoute: AdminPricingRoute,
   AdminProgramsRoute: AdminProgramsRoute,
   AdminSchedulesRoute: AdminSchedulesRoute,
+  AdminVisitorsRoute: AdminVisitorsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -495,6 +536,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterAiVideoTeensRoute: RegisterAiVideoTeensRoute,
   ApiPublicChatRoute: ApiPublicChatRoute,
   ApiPublicIndexnowPingRoute: ApiPublicIndexnowPingRoute,
+  ApiPublicTrackRoute: ApiPublicTrackRoute,
   ProgramsAiBusinessGrowthCurriculumRoute:
     ProgramsAiBusinessGrowthCurriculumRoute,
   ProgramsAiVideoTeensCurriculumRoute: ProgramsAiVideoTeensCurriculumRoute,
