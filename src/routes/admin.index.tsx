@@ -34,7 +34,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 function AdminOverview() {
-  const [counts, setCounts] = useState({ programs: 0, schedules: 0, tiers: 0, enquiries: 0, newEnquiries: 0 });
+  const [counts, setCounts] = useState({ programs: 0, schedules: 0, tiers: 0, enquiries: 0, newEnquiries: 0, visits7d: 0, uniques7d: 0 });
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [loading, setLoading] = useState(true);
 
