@@ -1,49 +1,80 @@
-## Goal
-Upgrade the site from "basic SEO" to fully optimized for AEO (answer engines), GEO (generative engines / LLM citation), and AIO (AI + local discovery), while keeping classic SEO clean.
+# Code-side AI Discoverability Improvements
 
-## 1. Classic SEO foundations
-- Add `public/robots.txt` allowing all, disallowing `/admin`, `/auth`, `/api/`, pointing to `/sitemap.xml`.
-- Add `src/routes/sitemap[.]xml.tsx` server route that dynamically lists: `/`, `/programs`, every `/programs/$slug`, curriculum pages, `/register/*`, `/enquire`. Uses program slugs from DB.
-- Add **canonical URL** meta on every public route (computed from the published domain).
-- Add per-page OG images (or fall back to a branded default) on curriculum + register pages.
-- Set a single `SITE_URL` constant (`https://grow-with-ai-academy.lovable.app`) in `src/lib/seo.ts`.
+Implement the high-impact code changes that help LLMs and AI search engines (ChatGPT Search, Perplexity, Google AI Overviews, Bing Copilot) discover, parse, and cite this site faster and more reliably.
 
-## 2. AEO — JSON-LD structured data
-Create `src/components/seo/JsonLd.tsx` (renders `<script type="application/ld+json">`) and `src/lib/schema.ts` builders. Inject:
-- **Root** (`__root.tsx`): `Organization` + `EducationalOrganization` + `WebSite` (with `SearchAction`) + `LocalBusiness` (Nigeria address, WhatsApp `contactPoint`).
-- **`/programs/$slug`**: `Course` schema with `provider`, `hasCourseInstance` (from schedules → `CourseInstance` w/ `startDate`, `endDate`, `courseMode`, `location`), and `offers` (from pricing tiers).
-- **Curriculum pages**: `Course` + `syllabusSections` (weekly modules) + `BreadcrumbList`.
-- **Register pages**: `Event` + `Offer`.
-- **Homepage**: `FAQPage` (see #3).
-- All pages: `BreadcrumbList`.
+## What this delivers
 
-## 3. FAQ section (for Answer Engines)
-Add an FAQ section to homepage + each program page with clean Q&A pairs ("Who is this for?", "How much does it cost?", "When does it start?", "Is it online or in-person?", "Do I get a certificate?"). Mirror them in `FAQPage` JSON-LD so Google/Bing AI Overviews can extract direct answers.
+1. **Fix the SSR/hydration warning** in `__root.tsx` so server-rendered HTML (which is what bots and LLM crawlers actually read) is clean and consistent.
+2. **A real `/faq` page** with `FAQPage` JSON-LD — the single highest-leverage page format for AI answer engines, since they extract Q&A pairs verbatim.
+3. **IndexNow integration** so Bing/Copilot/Yandex (and tools that pull from them) get notified instantly when content changes, instead of waiting weeks for a crawl.
+4. **Tighter root metadata** — site-wide title template + a default `og:image` referenced from absolute URL so social/AI cards never break.
+5. **Brand-consistent `og:image` per program** — register and curriculum pages reuse the program hero so AI answer cards have a relevant image.
 
-## 4. GEO — LLM-friendly surfaces
-- Add `public/llms.txt` (concise site map for LLMs: what this site is, key pages, programs list with one-line descriptions, contact).
-- Add `public/llms-full.txt` (longer, full program curricula + pricing + dates + FAQ in plain Markdown — single file LLMs can ingest).
-- Add `src/routes/api/public/site-summary.ts` returning JSON of programs + schedules + pricing for AI agents/scrapers.
-- Rewrite key sections to be **citation-friendly**: short declarative sentences, named entities ("AI Mastery Academy"), explicit dates, prices in NGN/USD, locations.
+---
 
-## 5. AIO — Local + entity signals
-- `LocalBusiness` schema with address, geo coords, opening hours, WhatsApp.
-- Add a small "About / Trainers" page (`/about`) with named instructor(s), credentials, photo, bio — strong E-E-A-T signal LLMs cite.
-- Add explicit location text ("Based in Lagos, Nigeria · Serving learners across Africa & globally online") to footer + homepage.
-- Expose WhatsApp + email as `ContactPoint` in Organization schema.
+## Changes
 
-## 6. Per-page metadata polish
-Helper `buildHead({ title, description, path, image, type })` in `src/lib/seo.ts` returns meta + canonical + og + twitter consistently. Replace inline `head:` blocks across all public routes.
+### 1. Fix root SSR shell (`src/routes/__root.tsx`)
+- Add `suppressHydrationWarning` on `<html>` and `<body>` to prevent hydration mismatch warnings from theme/font scripts.
+- Add a `titleTemplate`-style default by setting a generic `title` only when child routes don't override (already works via TanStack head dedup — just clean wording).
+- Ensure `og:url` and canonical are present at the root with absolute URLs from `SITE_URL` in `src/lib/seo.ts`.
 
-## Technical notes
-- New files: `src/lib/seo.ts`, `src/lib/schema.ts`, `src/components/seo/JsonLd.tsx`, `src/routes/sitemap[.]xml.tsx`, `src/routes/about.tsx`, `public/robots.txt`, `public/llms.txt`, `public/llms-full.txt`, `src/routes/api/public/site-summary.ts`.
-- Updated: `src/routes/__root.tsx`, `index.tsx`, `programs.tsx`, `programs.$slug.tsx`, both curriculum routes, both register routes — all consume `buildHead()` and inject relevant JSON-LD.
-- `llms.txt` + `llms-full.txt` can be regenerated; for now, hand-author from `src/lib/programs.ts` + DB seed data.
-- No new npm dependencies required (JSON-LD is plain script tags).
-- `noindex` stays on `/admin` and `/auth`.
+### 2. New `/faq` route (`src/routes/faq.tsx`)
+- Curated FAQ covering: what programs are offered, who they're for, AI Business Growth details, AI Video Bootcamp for Teens details, pricing, schedule/cohort, location (Lagos, Nigeria), delivery (live online), certificate, refund policy, how to register, payment methods, prerequisites.
+- Render visible Q&A (accordion using existing `@/components/ui/accordion`).
+- Inject `FAQPage` JSON-LD via existing `src/lib/schema.ts` (`faqPageSchema(items)` helper — add if missing).
+- `head()` with route-specific title, description, canonical, og tags, and `BreadcrumbList` JSON-LD.
+- Add `/faq` to `src/routes/sitemap[.]xml.tsx`.
+- Add a Footer link to `/faq` in `src/components/site/Footer.tsx`.
 
-## Out of scope (recommend later)
-- Real OG images per program (needs design assets).
-- Hooking sitemap to actual published domain once a custom domain is set.
-- Submitting sitemap to Google Search Console / Bing Webmaster.
-- Backlink/PR strategy (off-site GEO).
+### 3. IndexNow (`public/<key>.txt` + `src/routes/api/public/indexnow-ping.ts`)
+- Generate a stable IndexNow key (32-char hex), commit it as `public/<key>.txt` containing the same key (per IndexNow spec).
+- Add a small server route `POST /api/public/indexnow-ping` that accepts `{ urls: string[] }` (Zod-validated, max 50) and forwards to `https://api.indexnow.org/indexnow` with the site host + key. No auth required (it's a fan-out helper) but rate-limit by capping URL count and validating each URL belongs to `SITE_URL`.
+- Document usage in `public/llms.txt` (one line) — not user-facing.
+- Optional: trigger automatically from sitemap render (skip for now to keep scope tight; manual trigger is enough).
+
+### 4. Root metadata polish (`src/routes/__root.tsx` + `src/lib/seo.ts`)
+- Move all OG/Twitter image URLs to absolute (already absolute — just confirm).
+- Add `og:site_name`, `og:locale` (`en_NG`), and `twitter:site` placeholder (omit handle if unknown).
+- Ensure every page that uses `buildHead()` gets a canonical link automatically (already implemented — verify all current routes call it; patch the two that don't if any).
+
+### 5. Per-program `og:image` (`src/routes/register.*.tsx`, `src/routes/programs_.*.curriculum.tsx`)
+- Each program page already references a hero image. Pass that same absolute URL into `buildHead({ ogImage })` so social/AI cards show the program-specific image rather than the global default.
+
+---
+
+## Files to create
+
+- `src/routes/faq.tsx`
+- `src/routes/api/public/indexnow-ping.ts`
+- `public/<indexnow-key>.txt`
+
+## Files to edit
+
+- `src/routes/__root.tsx` — hydration suppression, `og:site_name`/`og:locale`
+- `src/lib/schema.ts` — add `faqPageSchema()` helper if not present
+- `src/lib/seo.ts` — accept and emit `ogImage` option (if not already)
+- `src/routes/sitemap[.]xml.tsx` — add `/faq`
+- `src/components/site/Footer.tsx` — add FAQ link
+- `src/routes/register.ai-business-growth.tsx` — pass program hero as `ogImage`
+- `src/routes/register.ai-video-teens.tsx` — same
+- `src/routes/programs_.ai-business-growth.curriculum.tsx` — same
+- `src/routes/programs_.ai-video-teens.curriculum.tsx` — same
+- `public/llms.txt` — append `/faq` to the page list
+
+---
+
+## Out of scope (intentionally)
+
+- Backlinks, directory submissions, social profiles — these are external/off-platform actions you do, not code.
+- Google Search Console / Bing Webmaster verification — requires you to add a DNS or meta verification token; happy to add the meta tag once you have it.
+- Auto-pinging IndexNow on every content change — keeping the helper manual for now.
+
+## Notes for non-technical readers
+
+After this ships, AI engines (ChatGPT Search, Perplexity, Copilot, Google AI Overviews) will have:
+- A clean, machine-readable FAQ page they can quote directly when someone asks "What does AI Mastery Academy teach?" or "How much is the AI Video Bootcamp for Teens?"
+- A fast notification channel (IndexNow) so Bing/Copilot index new pages within minutes instead of weeks.
+- Program-specific share images so AI-generated answer cards look correct.
+
+You should still expect 2–4 weeks before AI engines reliably cite a brand-new domain — code can't shortcut crawler trust, but it removes every technical reason for them to skip the site.
