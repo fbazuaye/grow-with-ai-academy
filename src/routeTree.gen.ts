@@ -28,6 +28,7 @@ import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
 import { Route as AdminEnquiriesRouteImport } from './routes/admin.enquiries'
 import { Route as ProgramsAiVideoTeensCurriculumRouteImport } from './routes/programs_.ai-video-teens.curriculum'
 import { Route as ProgramsAiBusinessGrowthCurriculumRouteImport } from './routes/programs_.ai-business-growth.curriculum'
+import { Route as ApiPublicTrackRouteImport } from './routes/api/public/track'
 import { Route as ApiPublicIndexnowPingRouteImport } from './routes/api/public/indexnow-ping'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 
@@ -130,6 +131,11 @@ const ProgramsAiBusinessGrowthCurriculumRoute =
     path: '/programs/ai-business-growth/curriculum',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicTrackRoute = ApiPublicTrackRouteImport.update({
+  id: '/api/public/track',
+  path: '/api/public/track',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicIndexnowPingRoute = ApiPublicIndexnowPingRouteImport.update({
   id: '/api/public/indexnow-ping',
   path: '/api/public/indexnow-ping',
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/indexnow-ping': typeof ApiPublicIndexnowPingRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
   '/programs/ai-video-teens/curriculum': typeof ProgramsAiVideoTeensCurriculumRoute
 }
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/indexnow-ping': typeof ApiPublicIndexnowPingRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
   '/programs/ai-video-teens/curriculum': typeof ProgramsAiVideoTeensCurriculumRoute
 }
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/indexnow-ping': typeof ApiPublicIndexnowPingRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/programs_/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
   '/programs_/ai-video-teens/curriculum': typeof ProgramsAiVideoTeensCurriculumRoute
 }
@@ -232,6 +241,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/api/public/chat'
     | '/api/public/indexnow-ping'
+    | '/api/public/track'
     | '/programs/ai-business-growth/curriculum'
     | '/programs/ai-video-teens/curriculum'
   fileRoutesByTo: FileRoutesByTo
@@ -254,6 +264,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/api/public/chat'
     | '/api/public/indexnow-ping'
+    | '/api/public/track'
     | '/programs/ai-business-growth/curriculum'
     | '/programs/ai-video-teens/curriculum'
   id:
@@ -277,6 +288,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/api/public/chat'
     | '/api/public/indexnow-ping'
+    | '/api/public/track'
     | '/programs_/ai-business-growth/curriculum'
     | '/programs_/ai-video-teens/curriculum'
   fileRoutesById: FileRoutesById
@@ -295,6 +307,7 @@ export interface RootRouteChildren {
   RegisterAiVideoTeensRoute: typeof RegisterAiVideoTeensRoute
   ApiPublicChatRoute: typeof ApiPublicChatRoute
   ApiPublicIndexnowPingRoute: typeof ApiPublicIndexnowPingRoute
+  ApiPublicTrackRoute: typeof ApiPublicTrackRoute
   ProgramsAiBusinessGrowthCurriculumRoute: typeof ProgramsAiBusinessGrowthCurriculumRoute
   ProgramsAiVideoTeensCurriculumRoute: typeof ProgramsAiVideoTeensCurriculumRoute
 }
@@ -434,6 +447,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsAiBusinessGrowthCurriculumRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/track': {
+      id: '/api/public/track'
+      path: '/api/public/track'
+      fullPath: '/api/public/track'
+      preLoaderRoute: typeof ApiPublicTrackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/indexnow-ping': {
       id: '/api/public/indexnow-ping'
       path: '/api/public/indexnow-ping'
@@ -495,6 +515,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterAiVideoTeensRoute: RegisterAiVideoTeensRoute,
   ApiPublicChatRoute: ApiPublicChatRoute,
   ApiPublicIndexnowPingRoute: ApiPublicIndexnowPingRoute,
+  ApiPublicTrackRoute: ApiPublicTrackRoute,
   ProgramsAiBusinessGrowthCurriculumRoute:
     ProgramsAiBusinessGrowthCurriculumRoute,
   ProgramsAiVideoTeensCurriculumRoute: ProgramsAiVideoTeensCurriculumRoute,
