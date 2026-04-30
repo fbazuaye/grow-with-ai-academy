@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProgramsRouteImport } from './routes/programs'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EnquireRouteImport } from './routes/enquire'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -27,6 +28,7 @@ import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
 import { Route as AdminEnquiriesRouteImport } from './routes/admin.enquiries'
 import { Route as ProgramsAiVideoTeensCurriculumRouteImport } from './routes/programs_.ai-video-teens.curriculum'
 import { Route as ProgramsAiBusinessGrowthCurriculumRouteImport } from './routes/programs_.ai-business-growth.curriculum'
+import { Route as ApiPublicIndexnowPingRouteImport } from './routes/api/public/indexnow-ping'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -37,6 +39,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
   path: '/programs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnquireRoute = EnquireRouteImport.update({
@@ -123,6 +130,11 @@ const ProgramsAiBusinessGrowthCurriculumRoute =
     path: '/programs/ai-business-growth/curriculum',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicIndexnowPingRoute = ApiPublicIndexnowPingRouteImport.update({
+  id: '/api/public/indexnow-ping',
+  path: '/api/public/indexnow-ping',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicChatRoute = ApiPublicChatRouteImport.update({
   id: '/api/public/chat',
   path: '/api/public/chat',
@@ -135,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/enquire': typeof EnquireRoute
+  '/faq': typeof FaqRoute
   '/programs': typeof ProgramsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/enquiries': typeof AdminEnquiriesRoute
@@ -147,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/register/ai-video-teens': typeof RegisterAiVideoTeensRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
+  '/api/public/indexnow-ping': typeof ApiPublicIndexnowPingRoute
   '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
   '/programs/ai-video-teens/curriculum': typeof ProgramsAiVideoTeensCurriculumRoute
 }
@@ -155,6 +169,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/enquire': typeof EnquireRoute
+  '/faq': typeof FaqRoute
   '/programs': typeof ProgramsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/enquiries': typeof AdminEnquiriesRoute
@@ -167,6 +182,7 @@ export interface FileRoutesByTo {
   '/register/ai-video-teens': typeof RegisterAiVideoTeensRoute
   '/admin': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
+  '/api/public/indexnow-ping': typeof ApiPublicIndexnowPingRoute
   '/programs/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
   '/programs/ai-video-teens/curriculum': typeof ProgramsAiVideoTeensCurriculumRoute
 }
@@ -177,6 +193,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/enquire': typeof EnquireRoute
+  '/faq': typeof FaqRoute
   '/programs': typeof ProgramsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/enquiries': typeof AdminEnquiriesRoute
@@ -189,6 +206,7 @@ export interface FileRoutesById {
   '/register/ai-video-teens': typeof RegisterAiVideoTeensRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
+  '/api/public/indexnow-ping': typeof ApiPublicIndexnowPingRoute
   '/programs_/ai-business-growth/curriculum': typeof ProgramsAiBusinessGrowthCurriculumRoute
   '/programs_/ai-video-teens/curriculum': typeof ProgramsAiVideoTeensCurriculumRoute
 }
@@ -200,6 +218,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/enquire'
+    | '/faq'
     | '/programs'
     | '/sitemap.xml'
     | '/admin/enquiries'
@@ -212,6 +231,7 @@ export interface FileRouteTypes {
     | '/register/ai-video-teens'
     | '/admin/'
     | '/api/public/chat'
+    | '/api/public/indexnow-ping'
     | '/programs/ai-business-growth/curriculum'
     | '/programs/ai-video-teens/curriculum'
   fileRoutesByTo: FileRoutesByTo
@@ -220,6 +240,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/enquire'
+    | '/faq'
     | '/programs'
     | '/sitemap.xml'
     | '/admin/enquiries'
@@ -232,6 +253,7 @@ export interface FileRouteTypes {
     | '/register/ai-video-teens'
     | '/admin'
     | '/api/public/chat'
+    | '/api/public/indexnow-ping'
     | '/programs/ai-business-growth/curriculum'
     | '/programs/ai-video-teens/curriculum'
   id:
@@ -241,6 +263,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/enquire'
+    | '/faq'
     | '/programs'
     | '/sitemap.xml'
     | '/admin/enquiries'
@@ -253,6 +276,7 @@ export interface FileRouteTypes {
     | '/register/ai-video-teens'
     | '/admin/'
     | '/api/public/chat'
+    | '/api/public/indexnow-ping'
     | '/programs_/ai-business-growth/curriculum'
     | '/programs_/ai-video-teens/curriculum'
   fileRoutesById: FileRoutesById
@@ -263,12 +287,14 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   EnquireRoute: typeof EnquireRoute
+  FaqRoute: typeof FaqRoute
   ProgramsRoute: typeof ProgramsRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AiBusinessGrowthCurriculumRoute: typeof AiBusinessGrowthCurriculumRoute
   RegisterAiBusinessGrowthRoute: typeof RegisterAiBusinessGrowthRoute
   RegisterAiVideoTeensRoute: typeof RegisterAiVideoTeensRoute
   ApiPublicChatRoute: typeof ApiPublicChatRoute
+  ApiPublicIndexnowPingRoute: typeof ApiPublicIndexnowPingRoute
   ProgramsAiBusinessGrowthCurriculumRoute: typeof ProgramsAiBusinessGrowthCurriculumRoute
   ProgramsAiVideoTeensCurriculumRoute: typeof ProgramsAiVideoTeensCurriculumRoute
 }
@@ -287,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/programs'
       fullPath: '/programs'
       preLoaderRoute: typeof ProgramsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/enquire': {
@@ -401,6 +434,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsAiBusinessGrowthCurriculumRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/indexnow-ping': {
+      id: '/api/public/indexnow-ping'
+      path: '/api/public/indexnow-ping'
+      fullPath: '/api/public/indexnow-ping'
+      preLoaderRoute: typeof ApiPublicIndexnowPingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/chat': {
       id: '/api/public/chat'
       path: '/api/public/chat'
@@ -447,12 +487,14 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   EnquireRoute: EnquireRoute,
+  FaqRoute: FaqRoute,
   ProgramsRoute: ProgramsRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   AiBusinessGrowthCurriculumRoute: AiBusinessGrowthCurriculumRoute,
   RegisterAiBusinessGrowthRoute: RegisterAiBusinessGrowthRoute,
   RegisterAiVideoTeensRoute: RegisterAiVideoTeensRoute,
   ApiPublicChatRoute: ApiPublicChatRoute,
+  ApiPublicIndexnowPingRoute: ApiPublicIndexnowPingRoute,
   ProgramsAiBusinessGrowthCurriculumRoute:
     ProgramsAiBusinessGrowthCurriculumRoute,
   ProgramsAiVideoTeensCurriculumRoute: ProgramsAiVideoTeensCurriculumRoute,
