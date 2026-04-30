@@ -1,0 +1,37 @@
+# AI Mastery Academy
+
+> Practical, beginner-friendly AI training delivered as live online cohorts. Based in Lagos, Nigeria. Serving learners across Africa and globally. Operated by LiveGig Ltd.
+
+AI Mastery Academy runs hands-on live training programs that teach non-engineers how to use AI tools (ChatGPT, Gemini, Claude, CapCut, Canva, YTRadar) to grow businesses, find jobs, create content, work smarter and earn online. All cohorts are delivered live on Zoom with recordings, templates and a private community.
+
+## Featured live programs (2026)
+
+- **AI for Business Growth Masterclass** — 2 Saturdays, 4 & 11 July 2026, 10:00 AM – 2:00 PM WAT, live on Zoom. For business owners and operators. Use AI to attract customers, write sales messages and close deals on WhatsApp. Curriculum: /programs/ai-business-growth/curriculum — Register: /register/ai-business-growth
+- **AI Video Bootcamp for Teens — Create, Post & Grow** — 4 Saturdays, 1, 8, 15 & 22 August 2026, 11:00 AM – 1:30 PM WAT, live on Zoom. For teens 13–19. Master AI video tools, CapCut, hook engineering and monetization for TikTok / Reels / YouTube Shorts. Curriculum: /programs/ai-video-teens/curriculum — Register: /register/ai-video-teens
+
+## Other tracks
+
+- AI for Job Seekers
+- AI for Content Creators
+- AI for Professionals
+- AI for Freelancers
+
+## Key pages
+
+- Home: /
+- All programs: /programs
+- About: /about
+- Contact / Enquire: /enquire
+- WhatsApp: https://wa.me/2347054265401
+
+## Contact
+
+- WhatsApp: +234 705 426 5401
+- Operated by: LiveGig Ltd, Lagos, Nigeria
+- Designed by: Frank Bazuaye
+
+## Optional
+
+- Full content (LLM-friendly): /llms-full.txt
+- Sitemap: /sitemap.xml
+- Structured data: JSON-LD (Organization, Course, Event, FAQPage, BreadcrumbList) embedded on every page
