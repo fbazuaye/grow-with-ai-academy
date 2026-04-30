@@ -195,6 +195,23 @@ function Index() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="mx-auto max-w-4xl px-4 py-20">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">FAQ</p>
+        <h2 className="mt-2 font-display text-3xl md:text-4xl">Frequently asked questions</h2>
+        <div className="mt-8 divide-y divide-border rounded-2xl border border-border bg-card">
+          {HOMEPAGE_FAQS.map((f) => (
+            <details key={f.q} className="group p-6 [&_summary::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer items-center justify-between gap-4 font-display text-lg">
+                {f.q}
+                <ArrowRight className="h-4 w-4 transition group-open:rotate-90" />
+              </summary>
+              <p className="mt-3 text-sm text-muted-foreground">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-4 py-20">
         <div className="relative overflow-hidden rounded-3xl bg-primary p-10 text-primary-foreground shadow-elegant md:p-16">
