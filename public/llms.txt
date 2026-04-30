@@ -21,6 +21,7 @@ AI Mastery Academy runs hands-on live training programs that teach non-engineers
 - Home: /
 - All programs: /programs
 - About: /about
+- FAQ: /faq
 - Contact / Enquire: /enquire
 - WhatsApp: https://wa.me/2347054265401
 

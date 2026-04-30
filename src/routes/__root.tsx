@@ -38,6 +38,9 @@ export const Route = createRootRoute({
       { property: "og:title", content: "AI Mastery Academy — Learn AI to Grow, Earn & Work Smarter" },
       { property: "og:description", content: "Practical AI training for entrepreneurs, job seekers, creators, professionals & freelancers. Live cohorts, real outcomes." },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "AI Mastery Academy" },
+      { property: "og:locale", content: "en_NG" },
+      { property: "og:url", content: "https://grow-with-ai-academy.lovable.app/" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "AI Mastery Academy — Learn AI to Grow, Earn & Work Smarter" },
       { name: "twitter:description", content: "Practical AI training for entrepreneurs, job seekers, creators, professionals & freelancers. Live cohorts, real outcomes." },
@@ -60,11 +63,11 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <Scripts />
       </body>
