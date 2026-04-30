@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, BookOpen, Calendar, Tag, Inbox, LogOut, Sparkles } from "lucide-react";
+import { LayoutDashboard, BookOpen, Calendar, Tag, Inbox, LogOut, Sparkles, Globe } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin")({
@@ -17,6 +17,7 @@ const NAV: { to: string; label: string; icon: typeof LayoutDashboard; exact?: bo
   { to: "/admin/schedules", label: "Schedules", icon: Calendar },
   { to: "/admin/pricing", label: "Pricing", icon: Tag },
   { to: "/admin/enquiries", label: "Enquiries", icon: Inbox },
+  { to: "/admin/visitors", label: "Visitors", icon: Globe },
 ];
 
 function AdminLayout() {

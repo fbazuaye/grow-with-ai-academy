@@ -22,6 +22,7 @@ import { Route as RegisterAiVideoTeensRouteImport } from './routes/register.ai-v
 import { Route as RegisterAiBusinessGrowthRouteImport } from './routes/register.ai-business-growth'
 import { Route as ProgramsSlugRouteImport } from './routes/programs.$slug'
 import { Route as AiBusinessGrowthCurriculumRouteImport } from './routes/ai-business-growth.curriculum'
+import { Route as AdminVisitorsRouteImport } from './routes/admin.visitors'
 import { Route as AdminSchedulesRouteImport } from './routes/admin.schedules'
 import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
 import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
@@ -99,6 +100,11 @@ const AiBusinessGrowthCurriculumRoute =
     path: '/ai-business-growth/curriculum',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AdminVisitorsRoute = AdminVisitorsRouteImport.update({
+  id: '/visitors',
+  path: '/visitors',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSchedulesRoute = AdminSchedulesRouteImport.update({
   id: '/schedules',
   path: '/schedules',
@@ -160,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/schedules': typeof AdminSchedulesRoute
+  '/admin/visitors': typeof AdminVisitorsRoute
   '/ai-business-growth/curriculum': typeof AiBusinessGrowthCurriculumRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/register/ai-business-growth': typeof RegisterAiBusinessGrowthRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/schedules': typeof AdminSchedulesRoute
+  '/admin/visitors': typeof AdminVisitorsRoute
   '/ai-business-growth/curriculum': typeof AiBusinessGrowthCurriculumRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/register/ai-business-growth': typeof RegisterAiBusinessGrowthRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/schedules': typeof AdminSchedulesRoute
+  '/admin/visitors': typeof AdminVisitorsRoute
   '/ai-business-growth/curriculum': typeof AiBusinessGrowthCurriculumRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/register/ai-business-growth': typeof RegisterAiBusinessGrowthRoute
@@ -234,6 +243,7 @@ export interface FileRouteTypes {
     | '/admin/pricing'
     | '/admin/programs'
     | '/admin/schedules'
+    | '/admin/visitors'
     | '/ai-business-growth/curriculum'
     | '/programs/$slug'
     | '/register/ai-business-growth'
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/admin/pricing'
     | '/admin/programs'
     | '/admin/schedules'
+    | '/admin/visitors'
     | '/ai-business-growth/curriculum'
     | '/programs/$slug'
     | '/register/ai-business-growth'
@@ -281,6 +292,7 @@ export interface FileRouteTypes {
     | '/admin/pricing'
     | '/admin/programs'
     | '/admin/schedules'
+    | '/admin/visitors'
     | '/ai-business-growth/curriculum'
     | '/programs/$slug'
     | '/register/ai-business-growth'
@@ -405,6 +417,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AiBusinessGrowthCurriculumRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/visitors': {
+      id: '/admin/visitors'
+      path: '/visitors'
+      fullPath: '/admin/visitors'
+      preLoaderRoute: typeof AdminVisitorsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/schedules': {
       id: '/admin/schedules'
       path: '/schedules'
@@ -476,6 +495,7 @@ interface AdminRouteChildren {
   AdminPricingRoute: typeof AdminPricingRoute
   AdminProgramsRoute: typeof AdminProgramsRoute
   AdminSchedulesRoute: typeof AdminSchedulesRoute
+  AdminVisitorsRoute: typeof AdminVisitorsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -484,6 +504,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPricingRoute: AdminPricingRoute,
   AdminProgramsRoute: AdminProgramsRoute,
   AdminSchedulesRoute: AdminSchedulesRoute,
+  AdminVisitorsRoute: AdminVisitorsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
