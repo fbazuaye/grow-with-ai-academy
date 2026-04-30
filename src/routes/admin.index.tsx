@@ -139,6 +139,25 @@ function AdminOverview() {
         ))}
       </div>
 
+      <Link
+        to="/admin/visitors"
+        className="mt-4 flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:border-accent"
+      >
+        <div className="flex items-center gap-3">
+          <span className="grid h-10 w-10 place-items-center rounded-lg bg-gradient-gold shadow-gold">
+            <Globe className="h-5 w-5 text-navy" />
+          </span>
+          <div>
+            <p className="text-sm font-medium">Visitors (last 7 days)</p>
+            <p className="text-xs text-muted-foreground">Geographic analytics — country, city, top pages</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="font-display text-2xl">{loading ? "—" : counts.visits7d}</p>
+          <p className="text-xs text-muted-foreground">{loading ? "" : `${counts.uniques7d} unique`}</p>
+        </div>
+      </Link>
+
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <div className="rounded-xl border border-border bg-card p-5">
           <div className="mb-1 flex items-baseline justify-between">
