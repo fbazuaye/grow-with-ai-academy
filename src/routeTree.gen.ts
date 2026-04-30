@@ -9,10 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as EnquireRouteImport } from './routes/enquire'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as RegisterAiVideoTeensRouteImport } from './routes/register.ai-video-teens'
@@ -27,6 +29,11 @@ import { Route as ProgramsAiVideoTeensCurriculumRouteImport } from './routes/pro
 import { Route as ProgramsAiBusinessGrowthCurriculumRouteImport } from './routes/programs_.ai-business-growth.curriculum'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
   path: '/programs',
@@ -45,6 +52,11 @@ const AuthRoute = AuthRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -119,10 +131,12 @@ const ApiPublicChatRoute = ApiPublicChatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/enquire': typeof EnquireRoute
   '/programs': typeof ProgramsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/enquiries': typeof AdminEnquiriesRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/programs': typeof AdminProgramsRoute
@@ -138,9 +152,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/enquire': typeof EnquireRoute
   '/programs': typeof ProgramsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/enquiries': typeof AdminEnquiriesRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/programs': typeof AdminProgramsRoute
@@ -157,10 +173,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/enquire': typeof EnquireRoute
   '/programs': typeof ProgramsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/enquiries': typeof AdminEnquiriesRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/programs': typeof AdminProgramsRoute
@@ -178,10 +196,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/admin'
     | '/auth'
     | '/enquire'
     | '/programs'
+    | '/sitemap.xml'
     | '/admin/enquiries'
     | '/admin/pricing'
     | '/admin/programs'
@@ -197,9 +217,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/auth'
     | '/enquire'
     | '/programs'
+    | '/sitemap.xml'
     | '/admin/enquiries'
     | '/admin/pricing'
     | '/admin/programs'
@@ -215,10 +237,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/admin'
     | '/auth'
     | '/enquire'
     | '/programs'
+    | '/sitemap.xml'
     | '/admin/enquiries'
     | '/admin/pricing'
     | '/admin/programs'
@@ -235,10 +259,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   EnquireRoute: typeof EnquireRoute
   ProgramsRoute: typeof ProgramsRouteWithChildren
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AiBusinessGrowthCurriculumRoute: typeof AiBusinessGrowthCurriculumRoute
   RegisterAiBusinessGrowthRoute: typeof RegisterAiBusinessGrowthRoute
   RegisterAiVideoTeensRoute: typeof RegisterAiVideoTeensRoute
@@ -249,6 +275,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/programs': {
       id: '/programs'
       path: '/programs'
@@ -275,6 +308,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -403,10 +443,12 @@ const ProgramsRouteWithChildren = ProgramsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   EnquireRoute: EnquireRoute,
   ProgramsRoute: ProgramsRouteWithChildren,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   AiBusinessGrowthCurriculumRoute: AiBusinessGrowthCurriculumRoute,
   RegisterAiBusinessGrowthRoute: RegisterAiBusinessGrowthRoute,
   RegisterAiVideoTeensRoute: RegisterAiVideoTeensRoute,

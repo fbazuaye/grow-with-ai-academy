@@ -16,23 +16,44 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+import { buildHead } from "@/lib/seo";
+import { courseSchema, breadcrumbSchema, jsonLdScript } from "@/lib/schema";
+
 export const Route = createFileRoute("/programs_/ai-video-teens/curriculum")({
-  head: () => ({
-    meta: [
-      { title: "AI Video Bootcamp for Teens — Create, Post & Grow (4 Saturdays)" },
-      {
-        name: "description",
-        content:
-          "A 4-Saturday hands-on bootcamp for teens (13–19). Master AI video tools, CapCut, trending hooks and monetization. Live online.",
-      },
-      { property: "og:title", content: "AI Video Bootcamp for Teens — Create, Post & Grow" },
-      {
-        property: "og:description",
-        content:
-          "4 Saturdays · 2–3 hrs each · Live online. Create scroll-stopping AI videos and learn to monetize.",
-      },
-    ],
-  }),
+  head: () => {
+    const base = buildHead({
+      title: "AI Video Bootcamp for Teens — Create, Post & Grow (4 Saturdays)",
+      description:
+        "A 4-Saturday hands-on bootcamp for teens (13–19). Master AI video tools, CapCut, trending hooks and monetization. Live online on Zoom in August 2026.",
+      path: "/programs/ai-video-teens/curriculum",
+      type: "course",
+    });
+    return {
+      ...base,
+      scripts: [
+        jsonLdScript(
+          courseSchema({
+            name: "AI Video Bootcamp for Teens — Create, Post & Grow",
+            description:
+              "A 4-Saturday live bootcamp teaching teens (13–19) how to create AI-powered short-form videos, find trends, edit in CapCut and monetize as creators.",
+            path: "/programs/ai-video-teens/curriculum",
+            audience: "Teens aged 13–19",
+            startDate: "2026-08-01T11:00:00+01:00",
+            endDate: "2026-08-22T13:30:00+01:00",
+            mode: "online",
+            location: "Zoom",
+          }),
+        ),
+        jsonLdScript(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Programs", path: "/programs" },
+            { name: "AI Video Bootcamp for Teens", path: "/programs/ai-video-teens/curriculum" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: CurriculumPage,
 });
 

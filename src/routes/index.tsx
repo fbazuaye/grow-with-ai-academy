@@ -4,9 +4,49 @@ import { Button } from "@/components/ui/button";
 import { fetchPrograms, type Program } from "@/lib/programs";
 import { ProgramIcon } from "@/components/site/ProgramIcon";
 import { whatsappLink } from "@/lib/whatsapp";
+import { buildHead } from "@/lib/seo";
+import { faqSchema, breadcrumbSchema, jsonLdScript } from "@/lib/schema";
 import heroImg from "@/assets/hero.jpg";
 
+const HOMEPAGE_FAQS = [
+  {
+    q: "Who is AI Mastery Academy for?",
+    a: "Beginners — entrepreneurs, job seekers, content creators, professionals, freelancers and teens. No coding or technical background required.",
+  },
+  {
+    q: "Are classes live or recorded?",
+    a: "Classes are live on Zoom. You also receive recordings of each session so you can rewatch any time.",
+  },
+  {
+    q: "Where is the academy based?",
+    a: "AI Mastery Academy is based in Lagos, Nigeria, and serves learners across Africa and globally — every class is delivered online.",
+  },
+  {
+    q: "How do I register for a program?",
+    a: "Open the program page and click Register Now, or send an enquiry from /enquire. You can also message us on WhatsApp at +234 705 426 5401.",
+  },
+  {
+    q: "Do I get a certificate?",
+    a: "Yes — a digital certificate of completion is issued after each program.",
+  },
+];
+
 export const Route = createFileRoute("/")({
+  head: () => {
+    const base = buildHead({
+      title: "AI Mastery Academy — Learn AI to Grow, Earn & Work Smarter",
+      description:
+        "Practical, live AI training cohorts based in Lagos, Nigeria. Programs for entrepreneurs, job seekers, content creators, professionals, freelancers and teens.",
+      path: "/",
+    });
+    return {
+      ...base,
+      scripts: [
+        jsonLdScript(faqSchema(HOMEPAGE_FAQS)),
+        jsonLdScript(breadcrumbSchema([{ name: "Home", path: "/" }])),
+      ],
+    };
+  },
   loader: () => fetchPrograms(),
   component: Index,
   errorComponent: ({ error }) => (
@@ -152,6 +192,23 @@ function Index() {
               </figure>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="mx-auto max-w-4xl px-4 py-20">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">FAQ</p>
+        <h2 className="mt-2 font-display text-3xl md:text-4xl">Frequently asked questions</h2>
+        <div className="mt-8 divide-y divide-border rounded-2xl border border-border bg-card">
+          {HOMEPAGE_FAQS.map((f) => (
+            <details key={f.q} className="group p-6 [&_summary::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer items-center justify-between gap-4 font-display text-lg">
+                {f.q}
+                <ArrowRight className="h-4 w-4 transition group-open:rotate-90" />
+              </summary>
+              <p className="mt-3 text-sm text-muted-foreground">{f.a}</p>
+            </details>
+          ))}
         </div>
       </section>
 

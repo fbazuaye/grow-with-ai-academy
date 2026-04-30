@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { ChatWidget } from "@/components/site/ChatWidget";
+import { organizationSchema, jsonLdScript } from "@/lib/schema";
 
 import appCss from "../styles.css?url";
 
@@ -50,6 +51,7 @@ export const Route = createRootRoute({
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" },
     ],
+    scripts: [jsonLdScript(organizationSchema())],
   }),
   shellComponent: RootShell,
   component: RootComponent,

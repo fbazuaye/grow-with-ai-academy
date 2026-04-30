@@ -13,15 +13,33 @@ import { whatsappLink } from "@/lib/whatsapp";
 const PROGRAM_ID = "207aed39-2cd7-4fc2-b502-68d35dda7e81";
 const PROGRAM_TITLE = "AI for Business Growth";
 
+import { buildHead } from "@/lib/seo";
+import { eventSchema, jsonLdScript } from "@/lib/schema";
+
 export const Route = createFileRoute("/register/ai-business-growth")({
-  head: () => ({
-    meta: [
-      { title: "Register — AI for Business Growth Masterclass" },
-      { name: "description", content: "Reserve your seat for the AI for Business Growth Masterclass on 4th & 11th July 2026. Two Saturdays, live online." },
-      { property: "og:title", content: "Register — AI for Business Growth Masterclass" },
-      { property: "og:description", content: "Two Saturdays · 4th & 11th July 2026. Practical AI to grow your business." },
-    ],
-  }),
+  head: () => {
+    const base = buildHead({
+      title: "Register — AI for Business Growth Masterclass",
+      description:
+        "Reserve your seat for the AI for Business Growth Masterclass on 4th & 11th July 2026. Two Saturdays, live online on Zoom.",
+      path: "/register/ai-business-growth",
+      type: "event",
+    });
+    return {
+      ...base,
+      scripts: [
+        jsonLdScript(
+          eventSchema({
+            name: "AI for Business Growth Masterclass",
+            description: "2-Saturday live class on using AI to get customers and grow sales.",
+            path: "/register/ai-business-growth",
+            startDate: "2026-07-04T10:00:00+01:00",
+            endDate: "2026-07-11T12:00:00+01:00",
+          }),
+        ),
+      ],
+    };
+  },
   component: RegisterPage,
 });
 
