@@ -4,9 +4,49 @@ import { Button } from "@/components/ui/button";
 import { fetchPrograms, type Program } from "@/lib/programs";
 import { ProgramIcon } from "@/components/site/ProgramIcon";
 import { whatsappLink } from "@/lib/whatsapp";
+import { buildHead } from "@/lib/seo";
+import { faqSchema, breadcrumbSchema, jsonLdScript } from "@/lib/schema";
 import heroImg from "@/assets/hero.jpg";
 
+const HOMEPAGE_FAQS = [
+  {
+    q: "Who is AI Mastery Academy for?",
+    a: "Beginners — entrepreneurs, job seekers, content creators, professionals, freelancers and teens. No coding or technical background required.",
+  },
+  {
+    q: "Are classes live or recorded?",
+    a: "Classes are live on Zoom. You also receive recordings of each session so you can rewatch any time.",
+  },
+  {
+    q: "Where is the academy based?",
+    a: "AI Mastery Academy is based in Lagos, Nigeria, and serves learners across Africa and globally — every class is delivered online.",
+  },
+  {
+    q: "How do I register for a program?",
+    a: "Open the program page and click Register Now, or send an enquiry from /enquire. You can also message us on WhatsApp at +234 705 426 5401.",
+  },
+  {
+    q: "Do I get a certificate?",
+    a: "Yes — a digital certificate of completion is issued after each program.",
+  },
+];
+
 export const Route = createFileRoute("/")({
+  head: () => {
+    const base = buildHead({
+      title: "AI Mastery Academy — Learn AI to Grow, Earn & Work Smarter",
+      description:
+        "Practical, live AI training cohorts based in Lagos, Nigeria. Programs for entrepreneurs, job seekers, content creators, professionals, freelancers and teens.",
+      path: "/",
+    });
+    return {
+      ...base,
+      scripts: [
+        jsonLdScript(faqSchema(HOMEPAGE_FAQS)),
+        jsonLdScript(breadcrumbSchema([{ name: "Home", path: "/" }])),
+      ],
+    };
+  },
   loader: () => fetchPrograms(),
   component: Index,
   errorComponent: ({ error }) => (
