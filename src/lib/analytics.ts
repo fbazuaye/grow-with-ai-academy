@@ -3,8 +3,7 @@ import { useLocation } from "@tanstack/react-router";
 
 function isBot() {
   if (typeof navigator === "undefined") return true;
-  // @ts-expect-error - webdriver may not exist
-  if (navigator.webdriver) return true;
+  if ((navigator as Navigator & { webdriver?: boolean }).webdriver) return true;
   return /bot|crawler|spider|headless/i.test(navigator.userAgent || "");
 }
 
