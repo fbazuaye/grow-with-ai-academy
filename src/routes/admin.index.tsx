@@ -42,7 +42,9 @@ function AdminOverview() {
     (async () => {
       const since = new Date();
       since.setDate(since.getDate() - 29);
-      const [p, s, t, e, n, list] = await Promise.all([
+      const since7 = new Date();
+      since7.setDate(since7.getDate() - 7);
+      const [p, s, t, e, n, list, pv] = await Promise.all([
         supabase.from("programs").select("*", { count: "exact", head: true }),
         supabase.from("schedules").select("*", { count: "exact", head: true }),
         supabase.from("pricing_tiers").select("*", { count: "exact", head: true }),
@@ -53,13 +55,21 @@ function AdminOverview() {
           .select("id,status,program_title,created_at")
           .gte("created_at", since.toISOString())
           .order("created_at", { ascending: true }),
+        supabase
+          .from("page_views")
+          .select("visitor_hash")
+          .gte("created_at", since7.toISOString())
+          .limit(10000),
       ]);
+      const pvRows = (pv.data ?? []) as { visitor_hash: string | null }[];
       setCounts({
         programs: p.count ?? 0,
         schedules: s.count ?? 0,
         tiers: t.count ?? 0,
         enquiries: e.count ?? 0,
         newEnquiries: n.count ?? 0,
+        visits7d: pvRows.length,
+        uniques7d: new Set(pvRows.map((r) => r.visitor_hash).filter(Boolean)).size,
       });
       setEnquiries((list.data ?? []) as Enquiry[]);
       setLoading(false);
