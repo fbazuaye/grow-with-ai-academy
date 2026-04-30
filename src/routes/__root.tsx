@@ -77,6 +77,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  useTrackPageView();
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
