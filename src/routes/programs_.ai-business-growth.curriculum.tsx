@@ -16,23 +16,44 @@ import {
 import { Button } from "@/components/ui/button";
 import { whatsappLink } from "@/lib/whatsapp";
 
+import { buildHead } from "@/lib/seo";
+import { courseSchema, breadcrumbSchema, jsonLdScript } from "@/lib/schema";
+
 export const Route = createFileRoute("/programs_/ai-business-growth/curriculum")({
-  head: () => ({
-    meta: [
-      { title: "AI for Business Growth — 2 Saturdays Live on Zoom (4 & 11 July 2026)" },
-      {
-        name: "description",
-        content:
-          "Use AI to get customers and increase your sales in just 2 Saturdays. Live on Zoom, 2 hours per session. No tech skills needed.",
-      },
-      { property: "og:title", content: "AI for Business Growth — 2-Saturday Live Class" },
-      {
-        property: "og:description",
-        content:
-          "Saturday 4 & 11 July 2026 · 2 hours each · Live on Zoom. No-tech AI training to grow your business.",
-      },
-    ],
-  }),
+  head: () => {
+    const base = buildHead({
+      title: "AI for Business Growth — 2 Saturdays Live on Zoom (4 & 11 July 2026)",
+      description:
+        "Use AI to get customers and increase your sales in just 2 Saturdays. Live on Zoom, 2 hours per session. No tech skills needed.",
+      path: "/programs/ai-business-growth/curriculum",
+      type: "course",
+    });
+    return {
+      ...base,
+      scripts: [
+        jsonLdScript(
+          courseSchema({
+            name: "AI for Business Growth Masterclass",
+            description:
+              "A 2-Saturday hands-on live class teaching business owners how to use AI to attract customers, write sales messages and close deals on WhatsApp.",
+            path: "/programs/ai-business-growth/curriculum",
+            audience: "Business owners and operators",
+            startDate: "2026-07-04T10:00:00+01:00",
+            endDate: "2026-07-11T12:00:00+01:00",
+            mode: "online",
+            location: "Zoom",
+          }),
+        ),
+        jsonLdScript(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Programs", path: "/programs" },
+            { name: "AI for Business Growth", path: "/programs/ai-business-growth/curriculum" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: CurriculumPage,
 });
 

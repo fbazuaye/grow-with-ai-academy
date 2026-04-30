@@ -14,15 +14,34 @@ const PROGRAM_ID = "258bdd73-d90a-419d-91e2-7d5c066989c4";
 const PROGRAM_TITLE = "AI Video Bootcamp for Teens";
 const SCHEDULE_LABEL = "4 Saturdays · 1, 8, 15 & 22 August 2026";
 
+import { buildHead } from "@/lib/seo";
+import { eventSchema, jsonLdScript } from "@/lib/schema";
+
 export const Route = createFileRoute("/register/ai-video-teens")({
-  head: () => ({
-    meta: [
-      { title: "Register — AI Video Bootcamp for Teens" },
-      { name: "description", content: "Reserve a seat for the AI Video Bootcamp for Teens. 4 Saturdays in August 2026, live online." },
-      { property: "og:title", content: "Register — AI Video Bootcamp for Teens" },
-      { property: "og:description", content: "4 Saturdays · 1–22 August 2026. Create, post & grow with AI video." },
-    ],
-  }),
+  head: () => {
+    const base = buildHead({
+      title: "Register — AI Video Bootcamp for Teens",
+      description:
+        "Reserve a seat for the AI Video Bootcamp for Teens. 4 Saturdays from 1–22 August 2026, live online on Zoom. Ages 13–19.",
+      path: "/register/ai-video-teens",
+      type: "event",
+    });
+    return {
+      ...base,
+      scripts: [
+        jsonLdScript(
+          eventSchema({
+            name: "AI Video Bootcamp for Teens — Create, Post & Grow",
+            description:
+              "4-Saturday live bootcamp teaching teens to create, post and monetize AI videos.",
+            path: "/register/ai-video-teens",
+            startDate: "2026-08-01T11:00:00+01:00",
+            endDate: "2026-08-22T13:30:00+01:00",
+          }),
+        ),
+      ],
+    };
+  },
   component: RegisterPage,
 });
 

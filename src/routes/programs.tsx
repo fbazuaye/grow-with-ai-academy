@@ -2,14 +2,29 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { fetchPrograms, type Program } from "@/lib/programs";
 import { ProgramIcon } from "@/components/site/ProgramIcon";
+import { buildHead } from "@/lib/seo";
+import { breadcrumbSchema, jsonLdScript } from "@/lib/schema";
 
 export const Route = createFileRoute("/programs")({
-  head: () => ({
-    meta: [
-      { title: "Programs — AI Mastery Academy" },
-      { name: "description", content: "Browse all live AI programs: Business Growth, Job Seekers, Content Creators, Professionals, Freelancers." },
-    ],
-  }),
+  head: () => {
+    const base = buildHead({
+      title: "All AI Programs — AI Mastery Academy",
+      description:
+        "Browse all live AI training cohorts: AI for Business Growth, AI Video Bootcamp for Teens, AI for Job Seekers, Content Creators, Professionals and Freelancers.",
+      path: "/programs",
+    });
+    return {
+      ...base,
+      scripts: [
+        jsonLdScript(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Programs", path: "/programs" },
+          ]),
+        ),
+      ],
+    };
+  },
   loader: () => fetchPrograms(),
   component: ProgramsPage,
   errorComponent: ({ error }) => <div className="p-10 text-center text-destructive">Error: {error.message}</div>,
