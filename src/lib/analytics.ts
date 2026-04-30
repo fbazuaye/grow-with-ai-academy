@@ -45,12 +45,12 @@ export function useTrackPageView() {
   const lastPath = useRef<string | null>(null);
 
   useEffect(() => {
-    const path = location.pathname + (location.searchStr || "");
+    const path = location.pathname;
     if (lastPath.current === path) return;
     const ref = lastPath.current
       ? window.location.origin + lastPath.current
       : document.referrer || null;
     lastPath.current = path;
     trackPageView(path, ref);
-  }, [location.pathname, location.searchStr]);
+  }, [location.pathname]);
 }
